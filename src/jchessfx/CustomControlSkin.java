@@ -1,16 +1,17 @@
 package jchessfx;
 
-
-//basic implementation of a Skin
-
-//imports 
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
 
-//class definition 
+/**
+ * Represent a default skin used by our custom controls.
+ */
 class CustomControlSkin extends SkinBase<CustomControl> implements Skin<CustomControl> {
+	/**
+	 * Create a new empty skin.
+	 * @param cc CustomControl associated with the skin.
+	 */
 	public CustomControlSkin(CustomControl cc) {
-		//call the super class constructor
 		super(cc);
 	}
 }
