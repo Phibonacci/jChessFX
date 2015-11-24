@@ -31,6 +31,7 @@ public class ChessApplication extends Application {
 	@Override
 	public void init() {
 		mainControl = new CustomControl();
+		mainControl.setPrefSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 		mainLayout = new StackPane();
 		mainLayout.getChildren().add(mainControl);

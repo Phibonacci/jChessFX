@@ -53,8 +53,7 @@ public class CustomControl extends Control {
 	public void resize(double width, double height) {
 		super.resize(width, height);
 
-		// TODO center the board
 		double size = Math.min(width, height);
-		board.resize(size, size);
+		board.setMaxSize(size, size);
 	}
 }
