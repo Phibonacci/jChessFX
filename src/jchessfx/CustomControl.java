@@ -6,9 +6,55 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Custom control representing the Chess board.
+ * Contains a default skin and a board.
+ * The control will detect mouse and keyboard interactions and overlay the board.
+ * 
+ * @see CustomControlSkin
+ * @see ChessBoard
+ */
 public class CustomControl extends Control {
-	
-	//similar to previous custom controlls but must handle more
-	//complex mouse interactions and key interactions
 
+	// Private fields
+	private ChessBoard board;
+	
+	/**
+	 * Create a new custom control.
+	 */
+	public CustomControl() {
+		setSkin(new CustomControlSkin(this));
+		
+		board = new ChessBoard();
+		getChildren().add(board);
+
+		setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO place piece event.getX event.getY
+			}
+		});
+		
+		setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if(event.getCode() == KeyCode.SPACE) {
+					// TODO reset game
+				}
+			}
+		});
+	}
+
+	/**
+	 * Overridden {@link Control#resize} method.
+	 * Resize the control and the internal board.
+	 */
+	@Override
+	public void resize(double width, double height) {
+		super.resize(width, height);
+
+		// TODO center the board
+		double size = Math.min(width, height);
+		board.resize(size, size);
+	}
 }
