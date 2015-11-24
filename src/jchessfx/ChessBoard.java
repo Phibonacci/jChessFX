@@ -1,9 +1,17 @@
 package jchessfx;
 
-public class ChessBoard {
+import javafx.scene.layout.Pane;
+
+public class ChessBoard extends Pane {
+	public static final int BOARD_WIDTH  = 8;
+	public static final int BOARD_HEIGHT = 8;
 	
+	private Piece[][]  board;
+	private Square[][] squares;
+
 	public ChessBoard() {
-		//initalize the board: background, data structures, inital layout of pieces
+		board   = new Piece[BOARD_WIDTH][BOARD_HEIGHT];
+		squares = new Square[BOARD_WIDTH][BOARD_HEIGHT];
 	}
 	
 	//resize method
