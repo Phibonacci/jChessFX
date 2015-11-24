@@ -1,39 +1,61 @@
 package jchessfx;
 
-//Chess  application
-
-//imports
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-//class definition
+/**
+ * A simple Chess application, made using JavaFX.
+ * 
+ * @version 1.0.0
+ * @author Jean Fauquenot, Paul-Maxime Le Duc
+ */
 public class ChessApplication extends Application {
-	// overridden init method
+	
+	// Constants
+	
+	private static final int WINDOW_HEIGHT = 800;
+	private static final int WINDOW_WIDTH  = 600;
+
+	// Private fields
+	
+	private StackPane mainLayout;
+	private CustomControl mainControl;
+
+	/**
+	 * Overridden {@link Application#init()} method.
+	 * Initializes all the controls used by the application and the default layout.
+	 * Attaches the controls events to the corresponding methods.
+	 */
 	@Override
 	public void init() {
-		// initialize the layout, create a CustomControl and it to the layout
+		mainControl = new CustomControl();
+
+		mainLayout = new StackPane();
+		mainLayout.getChildren().add(mainControl);
 	}
-	// overridden start method
+
+	/**
+	 * Overridden {@link Application#start(Stage)} method.
+	 * Set a title on the window, set a scene, size then show the window.
+	 * 
+	 * @param primaryStage Top level stage corresponding to the primary window.
+	 */
 	@Override
 	public void start(Stage primaryStage) {
-		// set the title and scene, and show the stage
 		primaryStage.setTitle("jChessFX");
+		primaryStage.setScene(new Scene(mainLayout, WINDOW_HEIGHT, WINDOW_WIDTH));
 		primaryStage.show();
 	}
 
-	// overridden stop method
-	@Override
-	public void stop() {
-	}
-	
-	// entry point into our program to launch our JavaFX application
+	/**
+	 * Entry point to our program.
+	 * Launches the JavaFX application using the specified command line arguments.
+	 * 
+	 * @param args Command line arguments passed to our program.
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-	// private fields for this class
-	private StackPane sp_mainlayout;	//layout which allows items to be positioned on top of each other
-	private CustomControl cc_custom;	//control which has a board and detects mouse and keyboard events
 }
