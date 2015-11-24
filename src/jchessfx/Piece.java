@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 //like to specify the private fields that all pieces should have in addition to their behaviours
 public abstract class Piece {
 
+	public static final int EMPTY = 0;
 	public static final int WHITE = 1;
 	public static final int BLACK = 2;
 	
