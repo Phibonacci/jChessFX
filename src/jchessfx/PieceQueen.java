@@ -2,8 +2,8 @@ package jchessfx;
 
 public class PieceQueen extends Piece {
 
-	public PieceQueen(int type) {
-		super(type);
+	public PieceQueen(int team) {
+		super(team);
 		// TODO Auto-generated constructor stub
 	}
 	
