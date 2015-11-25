@@ -15,8 +15,8 @@ public class Square extends Group {
 			shape.setStroke(Color.WHITE);
 			shape.setFill(Color.WHITE);
 		} else if (team == Piece.BLACK) {
-			shape.setStroke(Color.BLACK);
-			shape.setFill(Color.BLACK);
+			shape.setStroke(Color.DARKGRAY);
+			shape.setFill(Color.DARKGRAY);
 		}
 	}
 	
