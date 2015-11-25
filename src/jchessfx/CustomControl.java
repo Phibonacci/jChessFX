@@ -31,7 +31,7 @@ public class CustomControl extends Control {
 		setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				// TODO place piece event.getX event.getY
+				board.click(event.getX(), event.getY());
 			}
 		});
 		
