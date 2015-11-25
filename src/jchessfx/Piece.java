@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public abstract class Piece extends Group {
 
@@ -21,33 +22,36 @@ public abstract class Piece extends Group {
 	private int   team;
 	private Image image;
 	
-	private Canvas          canvas;
-	private GraphicsContext graphicsContext;
+    private ImageView imageView;
+    private Rectangle rectangle;
 	
 	public Piece(int team, String imageName) {
 		this.team = team;
 		String imagePath = IMAGES_PATH + "/" + (team == WHITE ? "white" : "black") + imageName + ".png";
-		canvas = new Canvas();
-		graphicsContext = canvas.getGraphicsContext2D();
+
 		try {
-			this.image = AssetsManager.INSTANCE.getImage(imagePath);
+			image     = AssetsManager.INSTANCE.getImage(imagePath);
+			imageView = new ImageView(image);
+			getChildren().add(imageView);
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
-			graphicsContext.setFill(Color.PINK);
+			System.err.println(e.getMessage());			
+			// graphicsContext.setFill(Color.PINK);
+			rectangle = new Rectangle();
+			rectangle.setFill(Color.PINK);
+			getChildren().add(rectangle);
 		}
-		getChildren().add(canvas);
 
 	}
 	
 	@Override
 	public void resize(double width, double height) {
 		super.resize(width, height);
-		canvas.setWidth(width);
-		canvas.setHeight(height);
 		if (image == null) {
-			graphicsContext.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+			rectangle.setWidth(width);
+			rectangle.setHeight(height);
 		} else {
-			graphicsContext.drawImage(image, 0, 0, width, height);
+			imageView.setFitWidth(width);
+			imageView.setFitHeight(height);
 		}
 	}
 	//move method
