@@ -26,13 +26,13 @@ public enum AssetsManager {
 			 *    java.lang.NullPointerException     - if URL is null
 			 *    java.lang.IllegalArgumentException - if URL is invalid or unsupported
 			 */
-	        java.io.FileInputStream fis = new FileInputStream(path);
+			java.io.FileInputStream fis = new FileInputStream(path);
 			Image newImage = new Image(fis);
 			images.put(path, newImage);
 		}
 		return images.get(path);
 	}
-	
+
 	public AudioClip getAudioClip(String path) {
 		if (!images.containsKey(path)) {
 			/*

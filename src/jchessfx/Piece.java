@@ -28,13 +28,12 @@ public abstract class Piece extends Group {
 		this.team = team;
 		String imagePath = IMAGES_PATH + "/" + (team == WHITE ? "white" : "black") + imageName + ".png";
 		canvas = new Canvas();
-        graphicsContext = canvas.getGraphicsContext2D();
+		graphicsContext = canvas.getGraphicsContext2D();
 		try {
 			this.image = AssetsManager.INSTANCE.getImage(imagePath);
-//	        ImageView iv = new ImageView(image);	        
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
-	        graphicsContext.setFill(Color.PINK);
+			graphicsContext.setFill(Color.PINK);
 		}
 		getChildren().add(canvas);
 
