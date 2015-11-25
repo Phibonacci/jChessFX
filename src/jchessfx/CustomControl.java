@@ -28,7 +28,7 @@ public class CustomControl extends Control {
 		board = new ChessBoard();
 		getChildren().add(board);
 
-		setOnMouseClicked(new EventHandler<MouseEvent>() {
+		board.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				board.click(event.getX(), event.getY());
