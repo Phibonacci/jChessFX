@@ -22,8 +22,8 @@ public abstract class Piece extends Group {
 	private int   team;
 	private Image image;
 	
-    private ImageView imageView;
-    private Rectangle rectangle;
+	private ImageView imageView;
+	private Rectangle rectangle;
 	
 	public Piece(int team, String imageName) {
 		this.team = team;
@@ -35,7 +35,6 @@ public abstract class Piece extends Group {
 			getChildren().add(imageView);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());			
-			// graphicsContext.setFill(Color.PINK);
 			rectangle = new Rectangle();
 			rectangle.setFill(Color.PINK);
 			getChildren().add(rectangle);
