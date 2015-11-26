@@ -1,7 +1,6 @@
 package jchessfx;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 public class ChessBoard extends Pane {
 	public static final int BOARD_WIDTH  = 8;
@@ -124,7 +123,7 @@ public class ChessBoard extends Pane {
 		
 		Piece target = board[indexy][indexx];
 		if (target == null && selected != null) {
-			if (selected.canMoveTo(indexx, indexy)) {
+			if (canSelectedPieceMoveTo(indexx, indexy)) {
 				board[selected.getY()][selected.getX()] = null;
 				board[indexy][indexx] = selected;
 				selected.setPosition(indexx, indexy);
@@ -137,14 +136,37 @@ public class ChessBoard extends Pane {
 			selected = null;			
 		}
 	}
+
+	private Piece getPiece(int x, int y) {
+		return board[y][x];
+	}
 	
-	//resize method
+	private boolean canSelectedPieceMoveTo(int x, int y) {
+		if (!selected.canMoveTo(x, y)) {
+			return false;
+		}
+		if (selected.hasLineOfSight() && !checkLineOfSight(selected.getX(), selected.getY(), x, y)) {
+			return false;
+		}
+		return true;
+	}
 	
-	//reset game method
-	
-	//select piece method
-	
-	//move piece method
-	
-	//private fields
+	private boolean checkLineOfSight(int x, int y, int toX, int toY) {
+		while (x != toX && y != toY) {
+			if (x > toX) {
+				x--;
+			} else if (x < toX) {
+				x++;
+			}
+			if (y > toY) {
+				y--;
+			} else if (y < toY) {
+				y++;
+			}
+			if ((x != toX || y != toY) && getPiece(x, y) != null) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
