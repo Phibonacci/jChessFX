@@ -107,8 +107,14 @@ public abstract class Piece extends Group {
 			imageView.setFitHeight(height);
 		}
 	}
-	//move method
+
+	public abstract boolean canMoveTo(int x, int y);
 	
-	//capture method
+	public boolean canCaptureTo(int x, int y) {
+		return canMoveTo(x, y);
+	}
 	
+	public boolean hasLineOfSight() {
+		return true;
+	}
 }

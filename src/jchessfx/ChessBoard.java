@@ -124,12 +124,14 @@ public class ChessBoard extends Pane {
 		
 		Piece target = board[indexy][indexx];
 		if (target == null && selected != null) {
-			board[selected.getY()][selected.getX()] = null;
-			board[indexy][indexx] = selected;
-			selected.setPosition(indexx, indexy);
-			selected.unSelect();
-			selected = null;
-			currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+			if (selected.canMoveTo(indexx, indexy)) {
+				board[selected.getY()][selected.getX()] = null;
+				board[indexy][indexx] = selected;
+				selected.setPosition(indexx, indexy);
+				selected.unSelect();
+				selected = null;
+				currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+			}
 		} else if (target != null && target == selected) {
 			selected.unSelect();
 			selected = null;			

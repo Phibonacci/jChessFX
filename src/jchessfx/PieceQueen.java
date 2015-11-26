@@ -6,6 +6,9 @@ public class PieceQueen extends Piece {
 		super(team, x, y, "Queen");
 	}
 	
-	//the move method of Queen could utilize both the move method of the rook and the bishop
-
+	@Override
+	public boolean canMoveTo(int x, int y) {
+		return PieceRook.canMoveInLineFromTo(getX(), getY(), x, y)
+		    || PieceBishop.canMoveDiagonallyFromTo(getX(), getY(), x, y);
+	}
 }
