@@ -1,6 +1,11 @@
 package jchessfx;
 
+import javafx.animation.PathTransition;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
 
 public class ChessBoard extends Pane {
 	public static final int BOARD_WIDTH  = 8;
@@ -138,32 +143,38 @@ public class ChessBoard extends Pane {
 			selected = null;
 		} else {
 			if (canSelectedPieceMoveTo(indexx, indexy)) {
+				// Store the old position.
 				final int oldPositionX = selected.getX();
 				final int oldPositionY = selected.getY();
+				
 				// Move the piece to the new position.
 				board[selected.getY()][selected.getX()] = null;
 				board[indexy][indexx] = selected;
-				
-				// Delete the target if it was a capture.
-				
-				// Clear the selected piece.
 				selected.setPosition(indexx, indexy);
 				selected.unSelect();
-				selected = null;
+				
+				// Delete the target if it was a capture.
+				if (target != null) {
+					getChildren().remove(target);
+				}
 				
 				if (isCheck(currentPlayer)) {
-					selected = board[indexy][indexx];
 					selected.setPosition(oldPositionX, oldPositionY);
 					board[oldPositionY][oldPositionX] = selected;
-					selected.select();
 					board[indexy][indexx] = target;
-				} else {
 					if (target != null) {
-						getChildren().remove(target);
+						getChildren().add(target);
 					}
+				} else {
+					// Add the animation.
+					addTransitionAnimation(selected, oldPositionX, oldPositionY);
+
 					// Swap the current player.
 					currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
 				}
+				
+				// Clear the selected piece.
+				selected = null;
 				
 			}
 		}
@@ -249,5 +260,30 @@ public class ChessBoard extends Pane {
 				squares[i][j].setSelectable(canSelectedPieceMoveTo(j, i));
 			}
 		}
+	}
+	
+	private void addTransitionAnimation(Piece piece, int fromX, int fromY) {
+		// Animations do not use the same origin as the relocate method, so we have to calculate it.
+		double originX = cellWidth * 0.5;
+		double originY = cellHeight * 0.5;
+		
+		// Calculate the distance out piece have to run through.
+		double deltaCellX = (fromX - piece.getX());
+		double deltaCellY = (fromY - piece.getY());
+		double deltaX = deltaCellX * cellWidth;
+		double deltaY = deltaCellY * cellHeight;
+		
+		// Calculate the duration of the animation, based on the distance.
+		double ms = Math.sqrt(deltaCellX * deltaCellX + deltaCellY * deltaCellY) * 200.0;
+		Duration duration = Duration.millis(ms);
+		
+		// Create the path the animation will follow.
+		Path path = new Path();
+		path.getElements().add(new MoveTo(originX + deltaX, originY + deltaY));
+		path.getElements().add(new LineTo(originX, originY));
+		
+		// Create and play the transition animation!
+		PathTransition pathTransition = new PathTransition(duration, path, piece);
+		pathTransition.play();
 	}
 }
