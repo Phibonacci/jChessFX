@@ -31,9 +31,4 @@ public class PiecePawn extends Piece {
 		}
 		return (Math.abs(getX() - x) == 1 && Math.abs(getY() - y) == 1);
 	}
-	
-	@Override
-	public boolean hasLineOfSight() {
-		return true;
-	}
 }
