@@ -152,14 +152,12 @@ public class ChessBoard extends Pane {
 				selected = null;
 				
 				if (isCheck(currentPlayer)) {
-					System.out.println("CHECK");
 					selected = board[indexy][indexx];
 					selected.setPosition(oldPositionX, oldPositionY);
 					board[oldPositionY][oldPositionX] = selected;
 					selected.select();
 					board[indexy][indexx] = target;
 				} else {
-					System.out.println("NO CHECK");
 					if (target != null) {
 						getChildren().remove(target);
 					}
@@ -179,7 +177,10 @@ public class ChessBoard extends Pane {
 				Piece target = board[j][i];
 				if (target != null && target.getTeam() != team) {
 					if (target.canCaptureTo(king.getX(), king.getY())) {
-						return true;
+						if (target.hasLineOfSight()
+								&& checkLineOfSight(target.getX(), target.getY(), king.getX(), king.getY())) {
+							return true;
+						}
 					}
 				}
 				
