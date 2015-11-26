@@ -16,7 +16,7 @@ public class ChessApplication extends Application {
 	// Constants
 	
 	private static final int WINDOW_HEIGHT = 800;
-	private static final int WINDOW_WIDTH  = 600;
+	private static final int WINDOW_WIDTH  = 800;
 
 	// Private fields
 	
