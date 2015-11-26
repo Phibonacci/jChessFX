@@ -1,11 +1,6 @@
 package jchessfx;
 
-import java.io.FileInputStream;
-import java.nio.file.Paths;
-
 import javafx.scene.Group;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
