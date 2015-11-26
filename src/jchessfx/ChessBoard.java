@@ -44,7 +44,7 @@ public class ChessBoard extends Pane {
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
 				squares[i][j].resize(cellWidth, cellHeight);
-				squares[i][j].relocate(i * cellWidth, j * cellHeight);
+				squares[i][j].relocate(j * cellWidth, i * cellHeight);
 				if (board[i][j] != null) {
 					board[i][j].resize(cellWidth, cellHeight);
 					board[i][j].relocate(j * cellWidth, i * cellHeight);
@@ -66,30 +66,30 @@ public class ChessBoard extends Pane {
 		for(int i = 0; i < board.length; i++) {
 			if (i == 0 || i == 7) {
 				int team = (i == 0 ? Piece.WHITE  : Piece.BLACK);
-				board[i][0] = new PieceRook  (team);
+				board[i][0] = new PieceRook  (team, 0, i);
 				getChildren().add(board[i][0]);
-				board[i][7] = new PieceRook  (team);
+				board[i][7] = new PieceRook  (team, 7, i);
 				getChildren().add(board[i][7]);
-				board[i][1] = new PieceKnight(team);
+				board[i][1] = new PieceKnight(team, 1, i);
 				getChildren().add(board[i][1]);
-				board[i][6] = new PieceKnight(team);
+				board[i][6] = new PieceKnight(team, 6, i);
 				getChildren().add(board[i][6]);
-				board[i][2] = new PieceBishop(team);
+				board[i][2] = new PieceBishop(team, 2, i);
 				getChildren().add(board[i][2]);
-				board[i][5] = new PieceBishop(team);
+				board[i][5] = new PieceBishop(team, 5, i);
 				getChildren().add(board[i][5]);
-				board[i][3] = new PieceKing  (team);
+				board[i][3] = new PieceKing  (team, 3, i);
 				getChildren().add(board[i][3]);
-				board[i][4] = new PieceQueen (team);
+				board[i][4] = new PieceQueen (team, 4, i);
 				getChildren().add(board[i][4]);
 			}
 			else {
 				for(int j = 0; j < board[i].length; j++) {
 					if (i == 1) {
-						board[i][j] = new PiecePawn(Piece.WHITE);
+						board[i][j] = new PiecePawn(Piece.WHITE, j, i);
 						getChildren().add(board[i][j]);
 					} else if (i == 6) {
-						board[i][j] = new PiecePawn(Piece.BLACK);
+						board[i][j] = new PiecePawn(Piece.BLACK, j, i);
 						getChildren().add(board[i][j]);
 					} else {
 						board[i][j] = null;
@@ -108,11 +108,32 @@ public class ChessBoard extends Pane {
 	}
 	
 	public void selectPiece(final double x, final double y) {
+		int indexx = (int)(x / cellWidth);
+		int indexy = (int)(y / cellHeight);
 		
+		Piece target = board[indexy][indexx];
+		if(target != null && currentPlayer == target.getTeam()) {
+			target.select();
+			selected = target;
+		} 
 	}
 	
 	public void placePiece(final double x, final double y) {
-
+		int indexx = (int)(x / cellWidth);
+		int indexy = (int)(y / cellHeight);
+		
+		Piece target = board[indexy][indexx];
+		if (target == null && selected != null) {
+			board[selected.getY()][selected.getX()] = null;
+			board[indexy][indexx] = selected;
+			selected.setPosition(indexx, indexy);
+			selected.unSelect();
+			selected = null;
+			currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+		} else if (target != null && target == selected) {
+			selected.unSelect();
+			selected = null;			
+		}
 	}
 	
 	//resize method
