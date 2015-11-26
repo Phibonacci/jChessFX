@@ -122,19 +122,29 @@ public class ChessBoard extends Pane {
 		int indexx = (int)(x / cellWidth);
 		int indexy = (int)(y / cellHeight);
 		
-		Piece target = board[indexy][indexx];
-		if (target == null && selected != null) {
+		Piece target = getPiece(indexx, indexy);
+		if (target != null && target == selected) {
+			selected.unSelect();
+			selected = null;
+		} else {
 			if (canSelectedPieceMoveTo(indexx, indexy)) {
+				// Move the piece to the new position.
 				board[selected.getY()][selected.getX()] = null;
 				board[indexy][indexx] = selected;
+				
+				// Delete the target if it was a capture.
+				if (target != null) {
+					getChildren().remove(target);
+				}
+				
+				// Clear the selected piece.
 				selected.setPosition(indexx, indexy);
 				selected.unSelect();
 				selected = null;
+				
+				// Swap the current player.
 				currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
 			}
-		} else if (target != null && target == selected) {
-			selected.unSelect();
-			selected = null;			
 		}
 		updateSelectableSquares();
 	}
