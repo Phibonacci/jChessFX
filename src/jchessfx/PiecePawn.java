@@ -24,8 +24,12 @@ public class PiecePawn extends Piece {
 
 	@Override
 	public boolean canCaptureTo(int x, int y) {
-		// TODO
-		return false;
+		// The the black pawns must go up and white pawns down.
+		if (getTeam() == Piece.BLACK && getY() < y
+		 || getTeam() == Piece.WHITE && getY() > y) {
+			return false;
+		}
+		return (Math.abs(getX() - x) == 1 && Math.abs(getY() - y) == 1);
 	}
 	
 	@Override
