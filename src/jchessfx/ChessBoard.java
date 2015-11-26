@@ -115,6 +115,7 @@ public class ChessBoard extends Pane {
 			target.select();
 			selected = target;
 		} 
+		updateSelectableSquares();
 	}
 	
 	public void placePiece(final double x, final double y) {
@@ -135,6 +136,7 @@ public class ChessBoard extends Pane {
 			selected.unSelect();
 			selected = null;			
 		}
+		updateSelectableSquares();
 	}
 
 	private Piece getPiece(int x, int y) {
@@ -142,17 +144,38 @@ public class ChessBoard extends Pane {
 	}
 	
 	private boolean canSelectedPieceMoveTo(int x, int y) {
-		if (!selected.canMoveTo(x, y)) {
+		// A non-existing piece cannot move. This is not negotiable.
+		if (selected == null) {
 			return false;
 		}
+		
+		// If we have a target, check if we can capture.
+		// If we don't, check if we can move.
+		Piece target = getPiece(x, y);
+		if (target != null) {
+			// We cannot capture a piece from our own team.
+			if (selected.getTeam() == target.getTeam()) {
+				return false;
+			}
+			if (!selected.canCaptureTo(x, y)) {
+				return false;
+			}
+		} else {
+			if (!selected.canMoveTo(x, y)) {
+				return false;
+			}
+		}
+		
+		// Check the line of sight if the piece requires one.
 		if (selected.hasLineOfSight() && !checkLineOfSight(selected.getX(), selected.getY(), x, y)) {
 			return false;
 		}
+		
 		return true;
 	}
 	
 	private boolean checkLineOfSight(int x, int y, int toX, int toY) {
-		while (x != toX && y != toY) {
+		while (x != toX || y != toY) {
 			if (x > toX) {
 				x--;
 			} else if (x < toX) {
@@ -168,5 +191,13 @@ public class ChessBoard extends Pane {
 			}
 		}
 		return true;
+	}
+	
+	private void updateSelectableSquares() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				squares[i][j].setSelectable(canSelectedPieceMoveTo(j, i));
+			}
+		}
 	}
 }

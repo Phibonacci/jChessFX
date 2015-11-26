@@ -6,18 +6,14 @@ import javafx.scene.shape.Rectangle;
 
 public class Square extends Group {
 	private Rectangle shape;
+	private int       team;
 	
 	public Square(int team) {
-		// make a new Ellipse and Translate, add the Translate to the Ellipse, add the Ellipse to the Group 
-		shape = new Rectangle();
+		this.shape = new Rectangle();
+		this.team  = team;
+		
 		getChildren().addAll(shape);
-		if (team == Piece.WHITE) {
-			shape.setStroke(Color.WHITE);
-			shape.setFill(Color.WHITE);
-		} else if (team == Piece.BLACK) {
-			shape.setStroke(Color.DARKGRAY);
-			shape.setFill(Color.DARKGRAY);
-		}
+		setSelectable(false);
 	}
 	
 	@Override
@@ -25,5 +21,16 @@ public class Square extends Group {
 		super.resize(width, height);
 		shape.setWidth(width);
 		shape.setHeight(height);
+	}
+	
+	public void setSelectable(boolean selectable) {
+		Color color = null;
+		if (team == Piece.WHITE) {
+			color = selectable ? Color.LIGHTGREEN : Color.WHITE;
+		} else if (team == Piece.BLACK) {
+			color = selectable ? Color.FORESTGREEN : Color.DARKGRAY;
+		}
+		shape.setStroke(color);
+		shape.setFill(color);
 	}
 }
