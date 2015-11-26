@@ -1,6 +1,14 @@
 package jchessfx;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -150,17 +158,12 @@ public class ChessBoard extends Pane {
 				// Move the piece to the new position.
 				setPiecePosition(selected, indexx, indexy);
 
-				// Delete the target if it was a capture.
-				if (target != null) {
-					getChildren().remove(target);
-				}
-
 				// Swap the current player.
 				currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
 
 				// Add the animation.
-				addTransitionAnimation(selected, oldPositionX, oldPositionY);
-				
+				addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
+
 				// Clear the selected piece.
 				selected.unSelect();
 				selected = null;
@@ -275,7 +278,7 @@ public class ChessBoard extends Pane {
 		}
 	}
 	
-	private void addTransitionAnimation(Piece piece, int fromX, int fromY) {
+	private void addTransitionAnimation(Piece piece, Piece target, int fromX, int fromY) {
 		// Animations do not use the same origin as the relocate method, so we have to calculate it.
 		double originX = cellWidth * 0.5;
 		double originY = cellHeight * 0.5;
@@ -298,5 +301,49 @@ public class ChessBoard extends Pane {
 		// Create and play the transition animation!
 		PathTransition pathTransition = new PathTransition(duration, path, piece);
 		pathTransition.play();
+		
+		// Run the fade-out animation as soon as we hit the target piece.
+		if (target != null) {
+	        runLater(ms - 150, new Runnable() {
+	        	@Override
+				public void run() {
+					ChessBoard.this.addFadeoutAnimation(target);
+				}
+			});		
+		}
+	}
+	
+	private void addFadeoutAnimation(Piece piece) {
+		// Create and play the fade-out animation to slowly make the piece invisible.
+		FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), piece);
+		fadeTransition.setFromValue(1.0);
+		fadeTransition.setToValue(0.0);
+		
+		// Rotating a piece before destroying it looks cool.
+        RotateTransition rotateTransition = new RotateTransition(Duration.millis(500), piece);
+	    rotateTransition.setByAngle(360f);
+	    
+        // Combine both animations into one and execute it!
+		ParallelTransition parallelTransition = new ParallelTransition();
+        parallelTransition.getChildren().addAll(fadeTransition, rotateTransition );
+        parallelTransition.play();
+        
+        // Delete the piece from the board as soon as the opacity is zero.
+        runLater(500.0, new Runnable() {
+        	@Override
+			public void run() {
+				ChessBoard.this.getChildren().remove(piece);
+			}
+		});
+	}
+	
+	private void runLater(double ms, Runnable runnable) {
+		Timeline delayTimeline = new Timeline(new KeyFrame(Duration.millis(ms), new EventHandler<ActionEvent>() {
+		    @Override
+		    public void handle(ActionEvent event) {
+				Platform.runLater(runnable);
+		    }
+		}));
+		delayTimeline.play();
 	}
 }
