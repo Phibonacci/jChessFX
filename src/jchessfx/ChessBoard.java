@@ -12,6 +12,10 @@ public class ChessBoard extends Pane {
 	private Square[][] squares;
 	private int currentPlayer;
 	private Piece selected;
+	
+	private Piece whiteKing;
+	private Piece blackKing;
+	private int   checkmate;
 
 	public ChessBoard() {
 		selected = null;
@@ -53,6 +57,7 @@ public class ChessBoard extends Pane {
 	}
 	
 	public void resetGame() {
+		checkmate = 0;
 		currentPlayer = Piece.WHITE;
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
@@ -77,10 +82,15 @@ public class ChessBoard extends Pane {
 				getChildren().add(board[i][2]);
 				board[i][5] = new PieceBishop(team, 5, i);
 				getChildren().add(board[i][5]);
-				board[i][3] = new PieceKing  (team, 3, i);
+				board[i][3] = new PieceQueen (team, 3, i);
 				getChildren().add(board[i][3]);
-				board[i][4] = new PieceQueen (team, 4, i);
+				board[i][4] = new PieceKing  (team, 4, i);
 				getChildren().add(board[i][4]);
+				if (team == Piece.WHITE) {
+					whiteKing = board[i][4];
+				} else {
+					blackKing = board[i][4];
+				}
 			}
 			else {
 				for(int j = 0; j < board[i].length; j++) {
@@ -128,27 +138,56 @@ public class ChessBoard extends Pane {
 			selected = null;
 		} else {
 			if (canSelectedPieceMoveTo(indexx, indexy)) {
+				final int oldPositionX = selected.getX();
+				final int oldPositionY = selected.getY();
 				// Move the piece to the new position.
 				board[selected.getY()][selected.getX()] = null;
 				board[indexy][indexx] = selected;
 				
 				// Delete the target if it was a capture.
-				if (target != null) {
-					getChildren().remove(target);
-				}
 				
 				// Clear the selected piece.
 				selected.setPosition(indexx, indexy);
 				selected.unSelect();
 				selected = null;
 				
-				// Swap the current player.
-				currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+				if (isCheck(currentPlayer)) {
+					System.out.println("CHECK");
+					selected = board[indexy][indexx];
+					selected.setPosition(oldPositionX, oldPositionY);
+					board[oldPositionY][oldPositionX] = selected;
+					selected.select();
+					board[indexy][indexx] = target;
+				} else {
+					System.out.println("NO CHECK");
+					if (target != null) {
+						getChildren().remove(target);
+					}
+					// Swap the current player.
+					currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+				}
+				
 			}
 		}
 		updateSelectableSquares();
 	}
 
+	private boolean isCheck(int team) {
+		Piece king = (team == Piece.WHITE ? whiteKing : blackKing);
+		for (int j = 0; j < BOARD_HEIGHT; j++) {
+			for (int i = 0; i < BOARD_WIDTH; i++) {
+				Piece target = board[j][i];
+				if (target != null && target.getTeam() != team) {
+					if (target.canCaptureTo(king.getX(), king.getY())) {
+						return true;
+					}
+				}
+				
+			}
+		}
+		return false;
+	}
+	
 	private Piece getPiece(int x, int y) {
 		return board[y][x];
 	}
