@@ -8,7 +8,7 @@ public class PiecePawn extends Piece {
 
 	@Override
 	public boolean canMoveTo(int x, int y) {
-		// The the black pawns must go up and white pawns down.
+		// The the white pawns must go up and black pawns down.
 		if (getTeam() == Piece.WHITE && getY() < y
 		 || getTeam() == Piece.BLACK && getY() > y) {
 			return false;
@@ -24,7 +24,7 @@ public class PiecePawn extends Piece {
 
 	@Override
 	public boolean canCaptureTo(int x, int y) {
-		// The the black pawns must go up and white pawns down.
+		// The the white pawns must go up and black pawns down.
 		if (getTeam() == Piece.WHITE && getY() < y
 		 || getTeam() == Piece.BLACK && getY() > y) {
 			return false;
