@@ -9,14 +9,14 @@ public class PiecePawn extends Piece {
 	@Override
 	public boolean canMoveTo(int x, int y) {
 		// The the black pawns must go up and white pawns down.
-		if (getTeam() == Piece.BLACK && getY() < y
-		 || getTeam() == Piece.WHITE && getY() > y) {
+		if (getTeam() == Piece.WHITE && getY() < y
+		 || getTeam() == Piece.BLACK && getY() > y) {
 			return false;
 		}
 		// The pawn can move from 2 squares at once during his first move.
 		int maxDistance = 1;
-		if ((getTeam() == Piece.BLACK && getY() == 6)
-		 || (getTeam() == Piece.WHITE && getY() == 1)) {
+		if ((getTeam() == Piece.WHITE && getY() == 6)
+		 || (getTeam() == Piece.BLACK && getY() == 1)) {
 			maxDistance = 2;
 		}
 		return (getX() == x && Math.abs(getY() - y) <= maxDistance);
@@ -25,8 +25,8 @@ public class PiecePawn extends Piece {
 	@Override
 	public boolean canCaptureTo(int x, int y) {
 		// The the black pawns must go up and white pawns down.
-		if (getTeam() == Piece.BLACK && getY() < y
-		 || getTeam() == Piece.WHITE && getY() > y) {
+		if (getTeam() == Piece.WHITE && getY() < y
+		 || getTeam() == Piece.BLACK && getY() > y) {
 			return false;
 		}
 		return (Math.abs(getX() - x) == 1 && Math.abs(getY() - y) == 1);

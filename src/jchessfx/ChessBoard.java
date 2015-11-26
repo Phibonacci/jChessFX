@@ -64,7 +64,7 @@ public class ChessBoard extends Pane {
 		}
 		for(int i = 0; i < board.length; i++) {
 			if (i == 0 || i == 7) {
-				int team = (i == 0 ? Piece.WHITE  : Piece.BLACK);
+				int team = (i == 0 ? Piece.BLACK  : Piece.WHITE);
 				board[i][0] = new PieceRook  (team, 0, i);
 				getChildren().add(board[i][0]);
 				board[i][7] = new PieceRook  (team, 7, i);
@@ -85,10 +85,10 @@ public class ChessBoard extends Pane {
 			else {
 				for(int j = 0; j < board[i].length; j++) {
 					if (i == 1) {
-						board[i][j] = new PiecePawn(Piece.WHITE, j, i);
+						board[i][j] = new PiecePawn(Piece.BLACK, j, i);
 						getChildren().add(board[i][j]);
 					} else if (i == 6) {
-						board[i][j] = new PiecePawn(Piece.BLACK, j, i);
+						board[i][j] = new PiecePawn(Piece.WHITE, j, i);
 						getChildren().add(board[i][j]);
 					} else {
 						board[i][j] = null;
