@@ -146,36 +146,29 @@ public class ChessBoard extends Pane {
 				// Store the old position.
 				final int oldPositionX = selected.getX();
 				final int oldPositionY = selected.getY();
-				
+
 				// Move the piece to the new position.
-				board[selected.getY()][selected.getX()] = null;
-				board[indexy][indexx] = selected;
-				selected.setPosition(indexx, indexy);
-				selected.unSelect();
-				
+				setPiecePosition(selected, indexx, indexy);
+
 				// Delete the target if it was a capture.
 				if (target != null) {
 					getChildren().remove(target);
 				}
-				
-				if (isCheck(currentPlayer)) {
-					selected.setPosition(oldPositionX, oldPositionY);
-					board[oldPositionY][oldPositionX] = selected;
-					board[indexy][indexx] = target;
-					if (target != null) {
-						getChildren().add(target);
-					}
-				} else {
-					// Add the animation.
-					addTransitionAnimation(selected, oldPositionX, oldPositionY);
 
-					// Swap the current player.
-					currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
-				}
+				// Swap the current player.
+				currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+
+				// Add the animation.
+				addTransitionAnimation(selected, oldPositionX, oldPositionY);
 				
 				// Clear the selected piece.
+				selected.unSelect();
 				selected = null;
-				
+			} else {
+				// Clear the selected piece if we click somewhere we cannot move.
+				selected.unSelect();
+				selected = null;
+
 			}
 		}
 		updateSelectableSquares();
@@ -186,12 +179,9 @@ public class ChessBoard extends Pane {
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
 			for (int i = 0; i < BOARD_WIDTH; i++) {
 				Piece target = board[j][i];
-				if (target != null && target.getTeam() != team) {
-					if (target.canCaptureTo(king.getX(), king.getY())) {
-						if (target.hasLineOfSight()
-								&& checkLineOfSight(target.getX(), target.getY(), king.getX(), king.getY())) {
-							return true;
-						}
+				if (target != null) {
+					if (canPieceMoveTo(target, king.getX(), king.getY())) {
+						return true;
 					}
 				}
 				
@@ -204,9 +194,17 @@ public class ChessBoard extends Pane {
 		return board[y][x];
 	}
 	
-	private boolean canSelectedPieceMoveTo(int x, int y) {
+	private void setPiecePosition(Piece piece, int x, int y) {
+		if (piece != null) {
+			board[piece.getY()][piece.getX()] = null;
+			piece.setPosition(x, y);
+		}
+		board[y][x] = piece;
+	}
+	
+	private boolean canPieceMoveTo(Piece piece, int x, int y) {
 		// A non-existing piece cannot move. This is not negotiable.
-		if (selected == null) {
+		if (piece == null) {
 			return false;
 		}
 		
@@ -215,24 +213,39 @@ public class ChessBoard extends Pane {
 		Piece target = getPiece(x, y);
 		if (target != null) {
 			// We cannot capture a piece from our own team.
-			if (selected.getTeam() == target.getTeam()) {
+			if (piece.getTeam() == target.getTeam()) {
 				return false;
 			}
-			if (!selected.canCaptureTo(x, y)) {
+			if (!piece.canCaptureTo(x, y)) {
 				return false;
 			}
 		} else {
-			if (!selected.canMoveTo(x, y)) {
+			if (!piece.canMoveTo(x, y)) {
 				return false;
 			}
 		}
 		
 		// Check the line of sight if the piece requires one.
-		if (selected.hasLineOfSight() && !checkLineOfSight(selected.getX(), selected.getY(), x, y)) {
+		if (piece.hasLineOfSight() && !checkLineOfSight(piece.getX(), piece.getY(), x, y)) {
 			return false;
 		}
 		
 		return true;
+	}
+
+	private boolean canSelectedPieceMoveTo(int x, int y) {
+		if (canPieceMoveTo(selected, x, y)) {
+			int oldX = selected.getX();
+			int oldY = selected.getY();
+			Piece target = getPiece(x, y);
+			
+			setPiecePosition(selected, x, y);
+			boolean check = isCheck(selected.getTeam());
+			setPiecePosition(selected, oldX, oldY);
+			setPiecePosition(target, x, y);
+			return !check;
+		}
+		return false;
 	}
 	
 	private boolean checkLineOfSight(int x, int y, int toX, int toY) {
