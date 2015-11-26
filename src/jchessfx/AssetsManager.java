@@ -2,6 +2,7 @@ package jchessfx;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public enum AssetsManager {
 			 *    java.lang.NullPointerException     - if URL is null
 			 *    java.lang.IllegalArgumentException - if URL is invalid or unsupported
 			 */
-			java.io.FileInputStream fis = new FileInputStream(path);
+			FileInputStream fis = new FileInputStream(getFullPath(path));
 			Image newImage = new Image(fis);
 			images.put(path, newImage);
 		}
@@ -44,5 +45,9 @@ public enum AssetsManager {
 			audioClips.put(path, newAudioClip);
 		}
 		return audioClips.get(path);
+	}
+	
+	private String getFullPath(String relativePath) {
+		return Paths.get(relativePath).toAbsolutePath().normalize().toString();
 	}
 }

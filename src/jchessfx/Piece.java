@@ -18,7 +18,7 @@ public abstract class Piece extends Group {
 	public static final int WHITE = 1;
 	public static final int BLACK = 2;
 	
-	public static final String IMAGES_PATH = Paths.get("./assets/images/pieces/").toAbsolutePath().normalize().toString();
+	public static final String IMAGES_PATH = "./assets/images/pieces/";
 	
 	private int   team;
 	private Image image;
@@ -33,7 +33,7 @@ public abstract class Piece extends Group {
 		this.team = team;
 		this.x = x;
 		this.y = y;
-		String imagePath = IMAGES_PATH + "/" + (team == WHITE ? "white" : "black") + imageName + ".png";
+		String imagePath = IMAGES_PATH + (team == WHITE ? "white" : "black") + imageName + ".png";
 
 		try {
 			image     = AssetsManager.INSTANCE.getImage(imagePath);
