@@ -2,8 +2,8 @@ package jchessfx;
 
 public class PieceKing extends Piece {
 
-	public PieceKing(int team) {
-		super(team, "King");
+	public PieceKing(int team, int x, int y) {
+		super(team, x, y, "King");
 	}
 
 }

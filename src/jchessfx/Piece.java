@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -25,8 +26,13 @@ public abstract class Piece extends Group {
 	private ImageView imageView;
 	private Rectangle rectangle;
 	
-	public Piece(int team, String imageName) {
+	private int x;
+	private int y;
+	
+	public Piece(int team, int x, int y, String imageName) {
 		this.team = team;
+		this.x = x;
+		this.y = y;
 		String imagePath = IMAGES_PATH + "/" + (team == WHITE ? "white" : "black") + imageName + ".png";
 
 		try {
@@ -41,6 +47,54 @@ public abstract class Piece extends Group {
 		}
 
 	}
+
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
+	
+	public void setX(int value) {
+		x = value;
+	}
+	
+	public void setY(int value) {
+		y = value;
+	}
+	
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public int getTeam() {
+		return team;
+	}
+	
+	private void setBrightness(double brightness) {
+		ColorAdjust effect = new ColorAdjust();
+		effect.setBrightness(brightness);
+		if (image == null) {
+			rectangle.setEffect(effect);
+		} else {
+			imageView.setEffect(effect);
+		}
+	}
+	
+	public void select() {
+		if (team == Piece.WHITE) {
+			setBrightness(-0.5);
+		} else {
+			setBrightness(0.25);
+		}
+	}
+	
+	public void unSelect() {
+		setBrightness(0);
+	}
+	
 	
 	@Override
 	public void resize(double width, double height) {
