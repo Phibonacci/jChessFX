@@ -12,7 +12,7 @@ public class Square extends Group {
 		this.shape = new Rectangle();
 		this.team  = team;
 
-		shape.setStroke(Color.rgb(32, 32, 32));
+		shape.setStroke(Color.rgb(128, 128, 128));
 		shape.setStrokeWidth(1.0);
 		
 		getChildren().addAll(shape);
