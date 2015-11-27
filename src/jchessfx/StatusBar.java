@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 
 public class StatusBar extends HBox {
 	
@@ -21,6 +22,14 @@ public class StatusBar extends HBox {
 		timerBlack = new Label("15:00");
 		timerWhite = new Label("15:00");
 
+
+		try {
+			Font font = AssetsManager.INSTANCE.getFont("assets/fonts/monofonto.ttf", 32);
+			timerBlack.setFont(font);
+			timerWhite.setFont(font);
+		} catch (Exception e) {
+		}
+		
 	    Region spacer = new Region();
 	    HBox.setHgrow(spacer, Priority.ALWAYS);
 	    
