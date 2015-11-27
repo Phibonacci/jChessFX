@@ -16,6 +16,10 @@ import javafx.scene.input.MouseEvent;
  */
 public class CustomControl extends Control {
 
+	// Private constants
+	private static final int MARGIN_WIDTH = 16;
+	private static final int MARGIN_HEIGHT = 8;
+	
 	// Private fields
 	private ChessBoard board;
 	
@@ -54,6 +58,6 @@ public class CustomControl extends Control {
 		super.resize(width, height);
 
 		double size = Math.min(width, height);
-		board.setMaxSize(size, size);
+		board.setMaxSize(size - MARGIN_WIDTH, size - MARGIN_HEIGHT);
 	}
 }

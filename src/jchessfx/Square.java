@@ -11,6 +11,9 @@ public class Square extends Group {
 	public Square(int team) {
 		this.shape = new Rectangle();
 		this.team  = team;
+
+		shape.setStroke(Color.rgb(32, 32, 32));
+		shape.setStrokeWidth(1.0);
 		
 		getChildren().addAll(shape);
 		setSelectable(false);
@@ -30,7 +33,6 @@ public class Square extends Group {
 		} else if (team == Piece.BLACK) {
 			color = selectable ? Color.FORESTGREEN : Color.DARKGRAY;
 		}
-		shape.setStroke(color);
 		shape.setFill(color);
 	}
 }
