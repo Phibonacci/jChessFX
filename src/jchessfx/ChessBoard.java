@@ -146,7 +146,7 @@ public class ChessBoard extends Pane {
 	}
 
 	public void click(final double x, final double y) {
-		if (gameState != STATE_PLAYING && gameState != STATE_CHECK) {
+		if (!isGameRunning()) {
 			return;
 		}
 		if (selected == null) {
@@ -230,6 +230,11 @@ public class ChessBoard extends Pane {
 	public int getGameSate()
 	{
 		return gameState;
+	}
+	
+	public boolean isGameRunning()
+	{
+		return (gameState == STATE_PLAYING || gameState == STATE_CHECK);
 	}
 	
 	private void updateGameState()
@@ -455,7 +460,7 @@ public class ChessBoard extends Pane {
 	}
 	
 	private void updateTime() {
-		if (gameState == STATE_PLAYING || gameState == STATE_CHECK) {
+		if (isGameRunning()) {
 			remainingSeconds[currentPlayer] -= 1;
 			updateStatus();
 		}
