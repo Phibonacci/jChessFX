@@ -455,8 +455,10 @@ public class ChessBoard extends Pane {
 	}
 	
 	private void updateTime() {
-		remainingSeconds[currentPlayer] -= 1;
-		updateStatus();
+		if (gameState == STATE_PLAYING || gameState == STATE_CHECK) {
+			remainingSeconds[currentPlayer] -= 1;
+			updateStatus();
+		}
 	}
 	
 	private void updateStatus() {
