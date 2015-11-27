@@ -28,11 +28,16 @@ public class ChessBoard extends Pane {
 	
 	private Piece whiteKing;
 	private Piece blackKing;
-	private int   checkmate;
+	
+	private static final int STATE_PLAYING   = 0;
+	private static final int STATE_CHECK     = 1;
+	private static final int STATE_CHECKMATE = 2;
+	private static final int STATE_STALEMATE = 3;
+	
+	private int   winner;
+	private int   gameState;
 
 	public ChessBoard() {
-		selected = null;
-		currentPlayer = Piece.WHITE;
 		board   = new Piece[BOARD_WIDTH][BOARD_HEIGHT];
 		squares = new Square[BOARD_WIDTH][BOARD_HEIGHT];
 		for(int i = 0; i < BOARD_WIDTH; i++) {
@@ -70,7 +75,9 @@ public class ChessBoard extends Pane {
 	}
 	
 	public void resetGame() {
-		checkmate = 0;
+		winner = Piece.EMPTY;
+		selected = null;
+		gameState = STATE_PLAYING;
 		currentPlayer = Piece.WHITE;
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
@@ -104,8 +111,7 @@ public class ChessBoard extends Pane {
 				} else {
 					blackKing = board[i][4];
 				}
-			}
-			else {
+			} else {
 				for(int j = 0; j < board[i].length; j++) {
 					if (i == 1) {
 						board[i][j] = new PiecePawn(Piece.BLACK, j, i);
@@ -122,6 +128,9 @@ public class ChessBoard extends Pane {
 	}
 
 	public void click(final double x, final double y) {
+		if (gameState != STATE_PLAYING && gameState != STATE_CHECK) {
+			return;
+		}
 		if (selected == null) {
 			selectPiece(x, y);
 		} else {
@@ -150,7 +159,7 @@ public class ChessBoard extends Pane {
 			selected.unSelect();
 			selected = null;
 		} else {
-			if (canSelectedPieceMoveTo(indexx, indexy)) {
+			if (isSelectedPieceAllowedToMoveTo(indexx, indexy)) {
 				// Store the old position.
 				final int oldPositionX = selected.getX();
 				final int oldPositionY = selected.getY();
@@ -158,25 +167,91 @@ public class ChessBoard extends Pane {
 				// Move the piece to the new position.
 				setPiecePosition(selected, indexx, indexy);
 
-				// Swap the current player.
-				currentPlayer = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
-
 				// Add the animation.
 				addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
 
 				// Clear the selected piece.
 				selected.unSelect();
 				selected = null;
+
+				updateGameState();
 			} else {
 				// Clear the selected piece if we click somewhere we cannot move.
 				selected.unSelect();
 				selected = null;
-
 			}
 		}
 		updateSelectableSquares();
 	}
 
+	/* 
+	 * Return the possible winner
+	 *  Piece.EMPTY
+	 *  Piece.BLACK
+	 *  Piece.WHITE
+	 * Piece.EMPTY is set for both a running game and a stalemate
+	 * Use getGameState to check the state of the game
+	 */
+	public int getWinner()
+	{
+		return winner;
+	}
+	
+	/*
+	 * Return the state of the game
+	 *  Board.STATE_PLAYING
+	 *  Board.STATE_CHECKMATE
+	 *  Board.STATE_STALEMATE
+	 */
+	public int getGameSate()
+	{
+		return gameState;
+	}
+	
+	private void updateGameState()
+	{
+		int nextPlayer  = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
+		boolean check   = isCheck(nextPlayer);
+		boolean canMove = isTeamAllowedToMove(nextPlayer);
+		
+		if (check && !canMove) {
+			gameState = STATE_CHECKMATE;
+			winner = currentPlayer;
+		} else if (!canMove) {
+			gameState = STATE_STALEMATE;
+		} else if (check) {
+			gameState = STATE_CHECK;
+			currentPlayer = nextPlayer;
+		} else {
+			gameState = STATE_PLAYING;
+			// Swap the current player.
+			currentPlayer = nextPlayer;
+		}
+	}
+	
+	private boolean isTeamAllowedToMove(int team) {
+		for (int j = 0; j < BOARD_HEIGHT; j++) {
+			for (int i = 0; i < BOARD_WIDTH; i++) {
+				Piece target = board[j][i];
+				if (target != null && target.getTeam() == team && isPieceAllowedToMove(target)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isPieceAllowedToMove(Piece piece) {
+		for (int j = 0; j < BOARD_HEIGHT; j++) {
+			for (int i = 0; i < BOARD_WIDTH; i++) {
+				if (isPieceAllowedToMoveTo(piece, i, j)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	private boolean isCheck(int team) {
 		Piece king = (team == Piece.WHITE ? whiteKing : blackKing);
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
@@ -236,19 +311,23 @@ public class ChessBoard extends Pane {
 		return true;
 	}
 
-	private boolean canSelectedPieceMoveTo(int x, int y) {
-		if (canPieceMoveTo(selected, x, y)) {
-			int oldX = selected.getX();
-			int oldY = selected.getY();
+	private boolean isPieceAllowedToMoveTo(Piece piece, int x, int y) {
+		if (canPieceMoveTo(piece, x, y)) {
+			int oldX = piece.getX();
+			int oldY = piece.getY();
 			Piece target = getPiece(x, y);
 			
-			setPiecePosition(selected, x, y);
-			boolean check = isCheck(selected.getTeam());
-			setPiecePosition(selected, oldX, oldY);
+			setPiecePosition(piece, x, y);
+			boolean check = isCheck(piece.getTeam());
+			setPiecePosition(piece, oldX, oldY);
 			setPiecePosition(target, x, y);
 			return !check;
 		}
 		return false;
+	}
+	
+	private boolean isSelectedPieceAllowedToMoveTo(int x, int y) {
+		return isPieceAllowedToMoveTo(selected, x, y);
 	}
 	
 	private boolean checkLineOfSight(int x, int y, int toX, int toY) {
@@ -273,7 +352,7 @@ public class ChessBoard extends Pane {
 	private void updateSelectableSquares() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				squares[i][j].setSelectable(canSelectedPieceMoveTo(j, i));
+				squares[i][j].setSelectable(isSelectedPieceAllowedToMoveTo(j, i));
 			}
 		}
 	}
