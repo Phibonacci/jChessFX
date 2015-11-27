@@ -3,6 +3,7 @@ package jchessfx;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -14,13 +15,17 @@ import javafx.stage.Stage;
 public class ChessApplication extends Application {
 	
 	// Constants
-	
-	private static final int WINDOW_HEIGHT = 800;
+
 	private static final int WINDOW_WIDTH  = 800;
+	private static final int WINDOW_HEIGHT = 800;
+	
+	private static final int WINDOW_MIN_WIDTH  = 300;
+	private static final int WINDOW_MIN_HEIGHT = 200;
 
 	// Private fields
 	
-	private StackPane mainLayout;
+	private VBox mainLayout;
+	private StatusBar statusBar;
 	private CustomControl mainControl;
 
 	/**
@@ -33,8 +38,11 @@ public class ChessApplication extends Application {
 		mainControl = new CustomControl();
 		mainControl.setPrefSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-		mainLayout = new StackPane();
-		mainLayout.getChildren().add(mainControl);
+		statusBar = new StatusBar();
+		
+		mainLayout = new VBox();
+		mainLayout.getChildren().addAll(mainControl, statusBar);
+		mainLayout.setStyle("-fx-background-color: #f0f0f0");
 	}
 
 	/**
@@ -46,7 +54,9 @@ public class ChessApplication extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("jChessFX");
-		primaryStage.setScene(new Scene(mainLayout, WINDOW_HEIGHT, WINDOW_WIDTH));
+		primaryStage.setScene(new Scene(mainLayout, WINDOW_WIDTH, WINDOW_HEIGHT));
+		primaryStage.setMinHeight(WINDOW_MIN_WIDTH);
+		primaryStage.setMinWidth(WINDOW_MIN_HEIGHT);
 		primaryStage.show();
 	}
 
