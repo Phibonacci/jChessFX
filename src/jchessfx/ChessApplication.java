@@ -2,7 +2,6 @@ package jchessfx;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -35,10 +34,10 @@ public class ChessApplication extends Application {
 	 */
 	@Override
 	public void init() {
-		mainControl = new CustomControl();
-		mainControl.setPrefSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
-
 		statusBar = new StatusBar();
+		
+		mainControl = new CustomControl(statusBar);
+		mainControl.setPrefSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		
 		mainLayout = new VBox();
 		mainLayout.getChildren().addAll(mainControl, statusBar);

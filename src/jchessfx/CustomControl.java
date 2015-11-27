@@ -25,12 +25,12 @@ public class CustomControl extends Control {
 	/**
 	 * Create a new custom control.
 	 */
-	public CustomControl() {
+	public CustomControl(StatusBar statusBar) {
 		setSkin(new CustomControlSkin(this));
 		
-		board = new ChessBoard();
+		board = new ChessBoard(statusBar);
 		getChildren().add(board);
-
+		
 		board.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {

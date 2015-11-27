@@ -1,5 +1,6 @@
 package jchessfx;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
@@ -36,8 +37,17 @@ public class ChessBoard extends Pane {
 	
 	private int   winner;
 	private int   gameState;
+	
+	private Timeline timer;
+	private int      remainingSeconds[];
+	
+	private StatusBar statusBar;
 
-	public ChessBoard() {
+	public ChessBoard(StatusBar statusBar) {
+		this.statusBar = statusBar;
+		
+		selected = null;
+		currentPlayer = Piece.WHITE;
 		board   = new Piece[BOARD_WIDTH][BOARD_HEIGHT];
 		squares = new Square[BOARD_WIDTH][BOARD_HEIGHT];
 		for(int i = 0; i < BOARD_WIDTH; i++) {
@@ -53,6 +63,9 @@ public class ChessBoard extends Pane {
 				getChildren().add(squares[i][j]);
 			}
 		}
+		timer = new Timeline(new KeyFrame(Duration.millis(1000), e -> updateTime()));
+		timer.setCycleCount(Animation.INDEFINITE);
+		remainingSeconds = new int[Piece.BLACK + 1];
 		resetGame();
 	}
 	
@@ -78,6 +91,7 @@ public class ChessBoard extends Pane {
 		winner = Piece.EMPTY;
 		selected = null;
 		gameState = STATE_PLAYING;
+		timer.stop();
 		currentPlayer = Piece.WHITE;
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
@@ -125,6 +139,10 @@ public class ChessBoard extends Pane {
 				}
 			}
 		}
+		remainingSeconds[Piece.WHITE] = 15 * 60;
+		remainingSeconds[Piece.BLACK] = 15 * 60;
+		timer.playFromStart();
+		updateStatus();
 	}
 
 	public void click(final double x, final double y) {
@@ -173,8 +191,14 @@ public class ChessBoard extends Pane {
 				// Clear the selected piece.
 				selected.unSelect();
 				selected = null;
-
 				updateGameState();
+				
+				// Reset the timer.
+				timer.stop();
+				timer.playFromStart();
+				
+				// Update the status bar.
+				updateStatus();
 			} else {
 				// Clear the selected piece if we click somewhere we cannot move.
 				selected.unSelect();
@@ -424,5 +448,18 @@ public class ChessBoard extends Pane {
 		    }
 		}));
 		delayTimeline.play();
+	}
+	
+	public int getRemainingSeconds(int player) {
+		return remainingSeconds[player];
+	}
+	
+	private void updateTime() {
+		remainingSeconds[currentPlayer] -= 1;
+		updateStatus();
+	}
+	
+	private void updateStatus() {
+		statusBar.updateStatus(this);
 	}
 }
