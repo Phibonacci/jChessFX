@@ -35,7 +35,7 @@ public abstract class Piece extends Group {
 			imageView = new ImageView(image);
 			getChildren().add(imageView);
 		} catch (Exception e) {
-			System.err.println(e.getMessage());			
+			System.err.println(e.getMessage());
 			rectangle = new Rectangle();
 			rectangle.setFill(Color.PINK);
 			getChildren().add(rectangle);
