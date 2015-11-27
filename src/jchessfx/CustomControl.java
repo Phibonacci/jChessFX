@@ -17,8 +17,7 @@ import javafx.scene.input.MouseEvent;
 public class CustomControl extends Control {
 
 	// Private constants
-	private static final int MARGIN_WIDTH = 16;
-	private static final int MARGIN_HEIGHT = 8;
+	private static final int MARGIN = 16;
 	
 	// Private fields
 	private ChessBoard board;
@@ -51,13 +50,26 @@ public class CustomControl extends Control {
 
 	/**
 	 * Overridden {@link Control#resize} method.
-	 * Resize the control and the internal board.
+	 * Resizes the control and the internal board.
 	 */
 	@Override
 	public void resize(double width, double height) {
 		super.resize(width, height);
 
+		// Make sure the board stays a square by computing the smallest size.
 		double size = Math.min(width, height);
-		board.setMaxSize(size - MARGIN_WIDTH, size - MARGIN_HEIGHT);
+		
+		// Leave enough space available for the margin;
+		size -= MARGIN;
+		
+		// Make sure the board size is a multiple of 8 to prevent blurry lines.
+		size -= size % 8;
+		
+		// Just in case...
+		if (size < 8) {
+			size = 8;
+		}
+		
+		board.setMaxSize(size, size);
 	}
 }
