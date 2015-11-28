@@ -216,8 +216,7 @@ public class ChessBoard extends Pane {
 	 * Piece.EMPTY is set for both a running game and a stalemate
 	 * Use getGameState to check the state of the game
 	 */
-	public int getWinner()
-	{
+	public int getWinner() {
 		return winner;
 	}
 	
@@ -227,26 +226,24 @@ public class ChessBoard extends Pane {
 	 *  Board.STATE_CHECKMATE
 	 *  Board.STATE_STALEMATE
 	 */
-	public int getGameSate()
-	{
+	public int getGameSate() {
 		return gameState;
 	}
 	
-	public boolean isGameRunning()
-	{
+	public boolean isGameRunning() {
 		return (gameState == STATE_PLAYING || gameState == STATE_CHECK);
 	}
 	
-	private void updateGameState()
-	{
+	private void updateGameState() {
 		int nextPlayer  = (currentPlayer == Piece.WHITE ? Piece.BLACK : Piece.WHITE);
 		boolean check   = isCheck(nextPlayer);
 		boolean canMove = isTeamAllowedToMove(nextPlayer);
+		boolean canEnd  = canGameEnd();
 		
 		if (check && !canMove) {
 			gameState = STATE_CHECKMATE;
 			winner = currentPlayer;
-		} else if (!canMove) {
+		} else if (!canMove || !canEnd) {
 			gameState = STATE_STALEMATE;
 		} else if (check) {
 			gameState = STATE_CHECK;
@@ -256,6 +253,40 @@ public class ChessBoard extends Pane {
 			// Swap the current player.
 			currentPlayer = nextPlayer;
 		}
+	}
+	
+	private boolean canGameEnd() {
+		int whiteTeam = 0;
+		int blackTeam = 0;
+		for (int j = 0; j < BOARD_HEIGHT; j++) {
+			for (int i = 0; i < BOARD_WIDTH; i++) {
+				int bonus = 0;
+				Piece target = board[j][i];
+				if (target == null) {
+					continue;
+				}
+				if (target instanceof PiecePawn) {
+					bonus = 2;
+				} else if (target instanceof PieceBishop) {
+					bonus = 1;
+				} else if (target instanceof PieceKnight) {
+					bonus = 1;
+				} else if (target instanceof PieceQueen) {
+					bonus = 2;
+				} else if (target instanceof PieceRook) {
+					bonus = 2;
+				}
+				if (target.getTeam() == Piece.WHITE) {
+					whiteTeam += bonus;
+				} else {
+					blackTeam += bonus;
+				}
+				if (whiteTeam >= 2 || blackTeam >= 2) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	private boolean isTeamAllowedToMove(int team) {
