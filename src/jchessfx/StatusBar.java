@@ -28,6 +28,8 @@ public class StatusBar extends HBox {
 	}
 	
 	public void updateStatus(ChessBoard board) {
+		String remainingWhite = board.getRemainingPiecesCount(Piece.WHITE) + "/16";
+		String remainingBlack = board.getRemainingPiecesCount(Piece.BLACK) + "/16";
 		String whiteTime = secondsToTime(board.getRemainingSeconds(Piece.WHITE));
 		String blackTime = secondsToTime(board.getRemainingSeconds(Piece.BLACK));
 		String separator = " | ";
@@ -42,7 +44,7 @@ public class StatusBar extends HBox {
 			separator = "| STALEMATE :( |";
 			break;
 		}
-		statusLabel.setText(whiteTime + separator + blackTime);
+		statusLabel.setText(remainingWhite + " - " + whiteTime + separator + blackTime + " - " + remainingBlack);
 	}
 	
 	private String secondsToTime(int seconds) {

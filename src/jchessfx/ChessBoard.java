@@ -493,6 +493,19 @@ public class ChessBoard extends Pane {
 		}
 	}
 	
+	public int getRemainingPiecesCount(int player) {
+		int count = 0;
+		for (int x = 0; x < BOARD_WIDTH; ++x) {
+			for (int y = 0; y < BOARD_HEIGHT; ++y) {
+				Piece piece = getPiece(x, y);
+				if (piece != null && piece.getTeam() == player) {
+					++count;
+				}
+			}
+		}
+		return count;
+	}
+	
 	private void updateStatus() {
 		statusBar.updateStatus(this);
 	}
