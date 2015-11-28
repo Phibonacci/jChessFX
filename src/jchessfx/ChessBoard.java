@@ -164,6 +164,7 @@ public class ChessBoard extends Pane {
 		remainingSeconds[Piece.BLACK] = 15 * 60;
 		timer.playFromStart();
 		updateStatus();
+		updateSelectableSquares();
 	}
 
 	public void click(final double x, final double y) {
