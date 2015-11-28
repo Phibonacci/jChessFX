@@ -478,6 +478,10 @@ public class ChessBoard extends Pane {
 	}
 	
 	private boolean isSelectedPieceAllowedToMoveTo(int x, int y) {
+		if (selected instanceof PieceKing && !selected.hasMoved() && y == selected.getY() && (x == 2 || x == 6)) {
+			if (isAllowedToDoCastling((PieceKing)selected, x, selected.getY()))
+				return true;
+		}
 		return isPieceAllowedToMoveTo(selected, x, y);
 	}
 	
@@ -505,10 +509,6 @@ public class ChessBoard extends Pane {
 			for (int j = 0; j < board[i].length; j++) {
 				squares[i][j].setSelectable(isSelectedPieceAllowedToMoveTo(j, i));
 			}
-		}
-		if (selected instanceof PieceKing) {
-			squares[selected.getY()][2].setSelectable(isAllowedToDoCastling((PieceKing)selected, 2, selected.getY()));
-			squares[selected.getY()][6].setSelectable(isAllowedToDoCastling((PieceKing)selected, 6, selected.getY()));
 		}
 	}
 	
