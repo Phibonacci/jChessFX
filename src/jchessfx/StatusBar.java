@@ -19,7 +19,7 @@ public class StatusBar extends HBox {
 		statusLabel = new Label();
 
 		try {
-			Font font = AssetsManager.INSTANCE.getFont("assets/fonts/monofonto.ttf", 24);
+			Font font = AssetsManager.INSTANCE.getFont("assets/fonts/monofonto.ttf", 18);
 			statusLabel.setFont(font);
 		} catch (Exception e) {
 		}
@@ -35,16 +35,22 @@ public class StatusBar extends HBox {
 		String separator = " | ";
 		switch (board.getGameSate()) {
 		case ChessBoard.STATE_CHECK:
-			separator = "| CHECK :) |";
+			separator = " | Check | ";
 			break;
 		case ChessBoard.STATE_CHECKMATE:
-			separator = "| CHECKMATE :D |";
+			separator = " | Checkmate | ";
 			break;
 		case ChessBoard.STATE_STALEMATE:
-			separator = "| STALEMATE :( |";
+			separator = " | Stalemate | ";
 			break;
 		}
-		statusLabel.setText(remainingWhite + " - " + whiteTime + separator + blackTime + " - " + remainingBlack);
+		String status = remainingWhite + " - " + whiteTime + separator + blackTime + " - " + remainingBlack;
+		if (board.getCurrentPlayer() == Piece.WHITE) {
+			status = "White    " + status + "         ";
+		} else {
+			status = "         " + status + "    Black";
+		}
+		statusLabel.setText(status);
 	}
 	
 	private String secondsToTime(int seconds) {
