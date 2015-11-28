@@ -211,9 +211,6 @@ public class ChessBoard extends Pane {
 				setPiecePosition(selected, indexx, indexy);
 				selected.addMoveCount();
 
-				// Add the animation.
-				addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
-
 				// Move the matching rook in case of castling
 				if (selected instanceof PieceKing && Math.abs(oldPositionX - indexx) == 2) {
 					final int rookY = (currentPlayer == Piece.WHITE ? 7 : 0);
@@ -224,8 +221,21 @@ public class ChessBoard extends Pane {
 					final int oldRookPositionY = rook.getY();
 					setPiecePosition(rook, (indexx == 2 ? 3 : 5), indexy);
 					rook.addMoveCount();
+					addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
 					addTransitionAnimation(rook, null, oldRookPositionX, oldRookPositionY);
+				} else if (selected instanceof PiecePawn && target == null && indexx != oldPositionX) { // En passant
+					final int pawnY = oldPositionY;
+					final int pawnX = selected.getX();
+
+					Piece pawn = board[pawnY][pawnX];
+					board[pawnY][pawnX] = null;
+					addTransitionAnimation(selected, pawn, oldPositionX, oldPositionY);
+				} else {
+					// Add the animation.
+					addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
 				}
+				
+				lastPieceToMove = selected;
 				
 				// Clear the selected piece.
 				selected.unSelect();
@@ -448,6 +458,9 @@ public class ChessBoard extends Pane {
 				return true;
 			}
 		}
+		if (piece instanceof PiecePawn && lastPieceToMove instanceof PiecePawn && isAllowedToDoEnPassant((PiecePawn)piece, x, y)) {
+			return true;
+		}
 		if (canPieceMoveTo(piece, x, y)) {
 			int oldX = piece.getX();
 			int oldY = piece.getY();
@@ -462,6 +475,29 @@ public class ChessBoard extends Pane {
 		return false;
 	}
 	
+	private boolean isAllowedToDoEnPassant(PiecePawn piece, int x, int y) {
+		if (!(lastPieceToMove instanceof PiecePawn)) {
+			return false;
+		}
+		PiecePawn lastPiece = (PiecePawn)lastPieceToMove;
+		
+//		System.out.println("testing en passant");
+//		if (lastPiece.getMoveCount() == 1 && (lastPiece.getY() == 3 || lastPiece.getY() == 4))
+//			System.out.println("LastPiece moved from 2 squares last turn?");
+//		if (piece.getY() == lastPiece.getY() && Math.abs(piece.getX() - lastPiece.getX()) == 1)
+//			System.out.println("Piece juxtaposed on Y?");
+//		if (y == lastPiece.getY() + (piece.getTeam() == Piece.WHITE ? -1 : 1) && x == lastPiece.getX())
+//			System.out.println("Diagonal move in the right direction?");
+		
+		
+		if (lastPiece.getMoveCount() == 1 && (lastPiece.getY() == 3 || lastPiece.getY() == 4)                    // LastPiece moved from 2 squares last turn?
+				&& piece.getY() == lastPiece.getY() && Math.abs(piece.getX() - lastPiece.getX()) == 1            // piece juxtaposed on Y?
+				&& y == lastPiece.getY() + (piece.getTeam() == Piece.WHITE ? -1 : 1) && x == lastPiece.getX()) { // diagonal move in the right direction?
+			return true;
+		}
+		return false;
+	}
+
 	private boolean isSelectedPieceAllowedToMoveTo(int x, int y) {
 		return isPieceAllowedToMoveTo(selected, x, y);
 	}
