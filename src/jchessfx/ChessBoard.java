@@ -30,10 +30,10 @@ public class ChessBoard extends Pane {
 	private Piece whiteKing;
 	private Piece blackKing;
 	
-	private static final int STATE_PLAYING   = 0;
-	private static final int STATE_CHECK     = 1;
-	private static final int STATE_CHECKMATE = 2;
-	private static final int STATE_STALEMATE = 3;
+	public static final int STATE_PLAYING   = 0;
+	public static final int STATE_CHECK     = 1;
+	public static final int STATE_CHECKMATE = 2;
+	public static final int STATE_STALEMATE = 3;
 	
 	private int   winner;
 	private int   gameState;
