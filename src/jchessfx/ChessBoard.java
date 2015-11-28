@@ -457,8 +457,7 @@ public class ChessBoard extends Pane {
 			if (isAllowedToDoCastling((PieceKing)piece, x, piece.getY())) {
 				return true;
 			}
-		}
-		if (piece instanceof PiecePawn && lastPieceToMove instanceof PiecePawn && isAllowedToDoEnPassant((PiecePawn)piece, x, y)) {
+		} else if (piece instanceof PiecePawn && lastPieceToMove instanceof PiecePawn && isAllowedToDoEnPassant((PiecePawn)piece, x, y)) {
 			return true;
 		}
 		if (canPieceMoveTo(piece, x, y)) {
@@ -479,16 +478,7 @@ public class ChessBoard extends Pane {
 		if (!(lastPieceToMove instanceof PiecePawn)) {
 			return false;
 		}
-		PiecePawn lastPiece = (PiecePawn)lastPieceToMove;
-		
-//		System.out.println("testing en passant");
-//		if (lastPiece.getMoveCount() == 1 && (lastPiece.getY() == 3 || lastPiece.getY() == 4))
-//			System.out.println("LastPiece moved from 2 squares last turn?");
-//		if (piece.getY() == lastPiece.getY() && Math.abs(piece.getX() - lastPiece.getX()) == 1)
-//			System.out.println("Piece juxtaposed on Y?");
-//		if (y == lastPiece.getY() + (piece.getTeam() == Piece.WHITE ? -1 : 1) && x == lastPiece.getX())
-//			System.out.println("Diagonal move in the right direction?");
-		
+		PiecePawn lastPiece = (PiecePawn)lastPieceToMove;		
 		
 		if (lastPiece.getMoveCount() == 1 && (lastPiece.getY() == 3 || lastPiece.getY() == 4)                    // LastPiece moved from 2 squares last turn?
 				&& piece.getY() == lastPiece.getY() && Math.abs(piece.getX() - lastPiece.getX()) == 1            // piece juxtaposed on Y?
