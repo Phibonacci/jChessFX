@@ -23,6 +23,8 @@ public abstract class Piece extends Group {
 	
 	private int x;
 	private int y;
+
+	private int moveCount;
 	
 	public Piece(int team, int x, int y, String imageName) {
 		this.team = team;
@@ -43,6 +45,25 @@ public abstract class Piece extends Group {
 
 	}
 
+	public boolean hasMoved() {
+		if (moveCount == 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public int getMoveCount() {
+		return moveCount;
+	}
+	
+	public void addMoveCount() {
+		moveCount++;
+	}
+
+	public void removeMoveCount() {
+		moveCount--;
+	}
+	
 	public int getX() {
 		return x;
 	}

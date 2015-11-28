@@ -206,10 +206,44 @@ public class ChessBoard extends Pane {
 
 				// Move the piece to the new position.
 				setPiecePosition(selected, indexx, indexy);
+				selected.addMoveCount();
 
 				// Add the animation.
 				addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
 
+				// Clear the selected piece.
+				selected.unSelect();
+				selected = null;
+				updateGameState();
+				
+				// Reset the timer.
+				timer.stop();
+				timer.playFromStart();
+				
+				// Update the status bar.
+				updateStatus();
+			} else if (selected instanceof PieceKing && isAllowedToDoCastling((PieceKing)selected, indexx, indexy)) {
+				// Store the old position.
+				final int oldSelectedPositionX = selected.getX();
+				final int oldSelectedPositionY = selected.getY();
+				final int rookY = (currentPlayer == Piece.WHITE ? 7 : 0);
+				final int rookX = (indexx == 2 ? 0 : 7);
+
+				Piece rook = board[rookY][rookX];
+				final int oldRookPositionX = rook.getX();
+				final int oldRookPositionY = rook.getY();				
+				
+				setPiecePosition(rook, (indexx == 2 ? 3 : 5), indexy);
+				rook.addMoveCount();
+				
+				// Move the piece to the new position.
+				setPiecePosition(selected, indexx, indexy);
+				selected.addMoveCount();
+				
+				// Add the animation.
+				addTransitionAnimation(selected, null, oldSelectedPositionX, oldSelectedPositionY);
+				addTransitionAnimation(rook, null, oldRookPositionX, oldRookPositionY);
+				
 				// Clear the selected piece.
 				selected.unSelect();
 				selected = null;
@@ -254,6 +288,22 @@ public class ChessBoard extends Pane {
 	
 	public boolean isGameRunning() {
 		return (gameState == STATE_PLAYING || gameState == STATE_CHECK);
+	}
+	
+	private boolean isAllowedToDoCastling(PieceKing king, int x, int y) {
+		if (king.hasMoved() || (x != 2 && x != 6)) {
+			return false;
+		}
+		final int rookY = (currentPlayer == Piece.WHITE ? 7 : 0);
+		final int rookX = (x == 2 ? 0 : 7);
+		Piece rook = board[rookY][rookX];
+		if (!(rook instanceof PieceRook) || rook.hasMoved()) {
+			return false;
+		}
+		if (!checkLineOfSight(rookX, rookY, (x == 2 ? 3 : 5), y)) {
+			return false;
+		}
+		return true;
 	}
 	
 	private void updateGameState() {
