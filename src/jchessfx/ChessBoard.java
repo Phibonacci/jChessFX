@@ -509,4 +509,16 @@ public class ChessBoard extends Pane {
 	private void updateStatus() {
 		statusBar.updateStatus(this);
 	}
+
+	public void pauseTimer() {
+		timer.stop();
+	}
+	
+	public void resumeTimer() {
+		timer.play();
+	}
+	
+	public int getCurrentPlayer() {
+		return currentPlayer;
+	}
 }

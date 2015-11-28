@@ -1,6 +1,8 @@
 package jchessfx;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,6 +23,8 @@ public class CustomControl extends Control {
 	
 	// Private fields
 	private ChessBoard board;
+	private GameMenu   menu;
+	private boolean    isMenuOpen;
 	
 	/**
 	 * Create a new custom control.
@@ -29,21 +33,49 @@ public class CustomControl extends Control {
 		setSkin(new CustomControlSkin(this));
 		
 		board = new ChessBoard(statusBar);
+		menu  = new GameMenu();
+
 		getChildren().add(board);
+		getChildren().add(menu);
+
+		menu.setAlignment(Pos.CENTER);
+		menu.setVisible(false);
+		isMenuOpen = false;
 		
 		board.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				board.click(event.getX(), event.getY());
+				if (!isMenuOpen) {
+					board.click(event.getX(), event.getY());
+				}
 			}
 		});
 		
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.R) {
-					board.resetGame();
+				if (event.getCode() == KeyCode.ESCAPE) {
+					toggleMenu();
+				} else if (!isMenuOpen) {
+					if (event.getCode() == KeyCode.R) {
+						board.resetGame();
+					}
 				}
+			}
+		});
+		
+		menu.setResumeAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				closeMenu();
+			}
+		});
+		
+		menu.setRestartAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				board.resetGame();
+				closeMenu();
 			}
 		});
 	}
@@ -71,5 +103,29 @@ public class CustomControl extends Control {
 		}
 		
 		board.setMaxSize(size, size);
+	}
+	
+	private void toggleMenu() {
+		if (isMenuOpen) {
+			closeMenu();
+		} else {
+			openMenu();
+		}
+	}
+
+	private void openMenu() {
+		if (!isMenuOpen) {
+			isMenuOpen = true;
+			menu.setVisible(true);
+			board.pauseTimer();
+		}
+	}
+	
+	private void closeMenu() {
+		if (isMenuOpen) {
+			isMenuOpen = false;
+			menu.setVisible(false);
+			board.resumeTimer();
+		}
 	}
 }
