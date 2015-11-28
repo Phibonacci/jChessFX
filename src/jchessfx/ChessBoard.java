@@ -143,9 +143,9 @@ public class ChessBoard extends Pane {
 			}
 		}
 		timer.playFromStart();
+		logic.reset();
 		updateStatus();
 		updateSelectableSquares();
-		logic.reset();
 	}
 
 	public void click(final double x, final double y) {
