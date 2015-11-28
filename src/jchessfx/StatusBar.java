@@ -28,7 +28,21 @@ public class StatusBar extends HBox {
 	}
 	
 	public void updateStatus(ChessBoard board) {
-		statusLabel.setText(secondsToTime(board.getRemainingSeconds(Piece.WHITE)) + " | " + secondsToTime(board.getRemainingSeconds(Piece.BLACK)));
+		String whiteTime = secondsToTime(board.getRemainingSeconds(Piece.WHITE));
+		String blackTime = secondsToTime(board.getRemainingSeconds(Piece.BLACK));
+		String separator = " | ";
+		switch (board.getGameSate()) {
+		case ChessBoard.STATE_CHECK:
+			separator = "| CHECK :) |";
+			break;
+		case ChessBoard.STATE_CHECKMATE:
+			separator = "| CHECKMATE :D |";
+			break;
+		case ChessBoard.STATE_STALEMATE:
+			separator = "| STALEMATE :( |";
+			break;
+		}
+		statusLabel.setText(whiteTime + separator + blackTime);
 	}
 	
 	private String secondsToTime(int seconds) {

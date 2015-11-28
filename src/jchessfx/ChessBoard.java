@@ -1,5 +1,8 @@
 package jchessfx;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -41,6 +44,9 @@ public class ChessBoard extends Pane {
 	private Timeline timer;
 	private int      remainingSeconds[];
 	
+	private List<Timeline> activeAnimations;
+	private List<Piece>    orphanPieces;
+
 	private StatusBar statusBar;
 
 	public ChessBoard(StatusBar statusBar) {
@@ -66,6 +72,8 @@ public class ChessBoard extends Pane {
 		timer = new Timeline(new KeyFrame(Duration.millis(1000), e -> updateTime()));
 		timer.setCycleCount(Animation.INDEFINITE);
 		remainingSeconds = new int[Piece.BLACK + 1];
+		activeAnimations = new LinkedList<Timeline>();
+		orphanPieces = new LinkedList<Piece>();
 		resetGame();
 	}
 	
@@ -88,6 +96,19 @@ public class ChessBoard extends Pane {
 	}
 	
 	public void resetGame() {
+		// Clear any active animation.
+		for (Timeline animation : activeAnimations) {
+			animation.stop();
+		}
+		activeAnimations.clear();
+		
+		// Delete all orphan pieces. They are no longer in the board
+		// and only used in animations.
+		for (Piece orphan : orphanPieces) {
+			getChildren().remove(orphan);
+		}
+		activeAnimations.clear();
+		
 		winner = Piece.EMPTY;
 		selected = null;
 		gameState = STATE_PLAYING;
@@ -412,12 +433,13 @@ public class ChessBoard extends Pane {
 		
 		// Run the fade-out animation as soon as we hit the target piece.
 		if (target != null) {
+			orphanPieces.add(target);
 	        runLater(ms - 150, new Runnable() {
 	        	@Override
 				public void run() {
-					ChessBoard.this.addFadeoutAnimation(target);
+					addFadeoutAnimation(target);
 				}
-			});		
+			});
 		}
 	}
 	
@@ -440,19 +462,23 @@ public class ChessBoard extends Pane {
         runLater(500.0, new Runnable() {
         	@Override
 			public void run() {
-				ChessBoard.this.getChildren().remove(piece);
+				getChildren().remove(piece);
+				orphanPieces.remove(piece);
 			}
 		});
 	}
 	
 	private void runLater(double ms, Runnable runnable) {
-		Timeline delayTimeline = new Timeline(new KeyFrame(Duration.millis(ms), new EventHandler<ActionEvent>() {
+		Timeline delayTimeline = new Timeline();
+		delayTimeline.getKeyFrames().add(new KeyFrame(Duration.millis(ms), new EventHandler<ActionEvent>() {
 		    @Override
 		    public void handle(ActionEvent event) {
+		    	activeAnimations.remove(delayTimeline);
 				Platform.runLater(runnable);
 		    }
 		}));
 		delayTimeline.play();
+		activeAnimations.add(delayTimeline);
 	}
 	
 	public int getRemainingSeconds(int player) {
