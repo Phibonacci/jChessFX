@@ -327,9 +327,18 @@ public class ChessBoard extends Pane {
 		}
 	}
 	
+	private int getColorSquare(Piece piece) {
+		if ((piece.getX() + piece.getY()) % 2 == 0) {
+			return Piece.WHITE;
+		}
+		return Piece.BLACK;
+	}
+	
 	private boolean canGameEnd() {
 		int whiteTeam = 0;
 		int blackTeam = 0;
+		int whiteBishop = Piece.EMPTY;
+		int blackBishop = Piece.EMPTY;
 		for (int j = 0; j < BOARD_HEIGHT; j++) {
 			for (int i = 0; i < BOARD_WIDTH; i++) {
 				int bonus = 0;
@@ -340,7 +349,14 @@ public class ChessBoard extends Pane {
 				if (target instanceof PiecePawn) {
 					bonus = 2;
 				} else if (target instanceof PieceBishop) {
-					bonus = 1;
+					int color = getColorSquare(target);
+					if (target.getTeam() == Piece.WHITE && whiteBishop != color) {
+						bonus = 1;
+						whiteBishop = color;
+					} else if (target.getTeam() == Piece.BLACK && blackBishop != color) {
+						bonus = 1;
+						blackBishop = color;
+					}
 				} else if (target instanceof PieceKnight) {
 					bonus = 1;
 				} else if (target instanceof PieceQueen) {
