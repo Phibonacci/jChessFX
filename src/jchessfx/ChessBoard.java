@@ -214,6 +214,7 @@ public class ChessBoard extends Pane {
 				// Add the animation.
 				addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
 
+				// Move the matching rook in case of castling
 				if (selected instanceof PieceKing && Math.abs(oldPositionX - indexx) == 2) {
 					final int rookY = (currentPlayer == Piece.WHITE ? 7 : 0);
 					final int rookX = (indexx == 2 ? 0 : 7);
@@ -442,6 +443,11 @@ public class ChessBoard extends Pane {
 	}
 
 	private boolean isPieceAllowedToMoveTo(Piece piece, int x, int y) {
+		if (piece instanceof PieceKing && !piece.hasMoved() && y == piece.getY() && (x == 2 || x == 6)) {
+			if (isAllowedToDoCastling((PieceKing)piece, x, piece.getY())) {
+				return true;
+			}
+		}
 		if (canPieceMoveTo(piece, x, y)) {
 			int oldX = piece.getX();
 			int oldY = piece.getY();
@@ -457,10 +463,6 @@ public class ChessBoard extends Pane {
 	}
 	
 	private boolean isSelectedPieceAllowedToMoveTo(int x, int y) {
-		if (selected instanceof PieceKing && !selected.hasMoved() && y == selected.getY() && (x == 2 || x == 6)) {
-			if (isAllowedToDoCastling((PieceKing)selected, x, selected.getY()))
-				return true;
-		}
 		return isPieceAllowedToMoveTo(selected, x, y);
 	}
 	
