@@ -33,6 +33,8 @@ public class ChessBoard extends Pane {
 	private Piece whiteKing;
 	private Piece blackKing;
 	
+	private Piece lastPieceToMove;
+	
 	public static final int STATE_PLAYING   = 0;
 	public static final int STATE_CHECK     = 1;
 	public static final int STATE_CHECKMATE = 2;
@@ -109,6 +111,7 @@ public class ChessBoard extends Pane {
 		}
 		activeAnimations.clear();
 		
+		lastPieceToMove = null;
 		winner = Piece.EMPTY;
 		selected = null;
 		gameState = STATE_PLAYING;
@@ -327,7 +330,7 @@ public class ChessBoard extends Pane {
 		}
 	}
 	
-	private int getColorSquare(Piece piece) {
+	private int getSquareColor(Piece piece) {
 		if ((piece.getX() + piece.getY()) % 2 == 0) {
 			return Piece.WHITE;
 		}
@@ -349,7 +352,7 @@ public class ChessBoard extends Pane {
 				if (target instanceof PiecePawn) {
 					bonus = 2;
 				} else if (target instanceof PieceBishop) {
-					int color = getColorSquare(target);
+					int color = getSquareColor(target);
 					if (target.getTeam() == Piece.WHITE && whiteBishop != color) {
 						bonus = 1;
 						whiteBishop = color;
