@@ -231,7 +231,7 @@ public class ChessBoard extends Pane {
 
 				Piece rook = board[rookY][rookX];
 				final int oldRookPositionX = rook.getX();
-				final int oldRookPositionY = rook.getY();				
+				final int oldRookPositionY = rook.getY();
 				
 				setPiecePosition(rook, (indexx == 2 ? 3 : 5), indexy);
 				rook.addMoveCount();
@@ -486,6 +486,10 @@ public class ChessBoard extends Pane {
 			for (int j = 0; j < board[i].length; j++) {
 				squares[i][j].setSelectable(isSelectedPieceAllowedToMoveTo(j, i));
 			}
+		}
+		if (selected instanceof PieceKing) {
+			squares[selected.getY()][2].setSelectable(isAllowedToDoCastling((PieceKing)selected, 2, selected.getY()));
+			squares[selected.getY()][6].setSelectable(isAllowedToDoCastling((PieceKing)selected, 6, selected.getY()));
 		}
 	}
 	
