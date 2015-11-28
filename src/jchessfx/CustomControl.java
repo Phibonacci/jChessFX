@@ -41,8 +41,8 @@ public class CustomControl extends Control {
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.SPACE) {
-					// TODO reset game
+				if (event.getCode() == KeyCode.R) {
+					board.resetGame();
 				}
 			}
 		});
