@@ -27,20 +27,20 @@ public class StatusBar extends HBox {
 		getChildren().addAll(statusLabel);
 	}
 	
-	public void updateStatus(ChessBoard board) {
+	public void updateStatus(GameLogic board) {
 		String remainingWhite = board.getRemainingPiecesCount(Piece.WHITE) + "/16";
 		String remainingBlack = board.getRemainingPiecesCount(Piece.BLACK) + "/16";
 		String whiteTime = secondsToTime(board.getRemainingSeconds(Piece.WHITE));
 		String blackTime = secondsToTime(board.getRemainingSeconds(Piece.BLACK));
 		String separator = " | ";
-		switch (board.getGameSate()) {
-		case ChessBoard.STATE_CHECK:
+		switch (board.getGameState()) {
+		case GameLogic.STATE_CHECK:
 			separator = " | Check | ";
 			break;
-		case ChessBoard.STATE_CHECKMATE:
+		case GameLogic.STATE_CHECKMATE:
 			separator = " | Checkmate | ";
 			break;
-		case ChessBoard.STATE_STALEMATE:
+		case GameLogic.STATE_STALEMATE:
 			separator = " | Stalemate | ";
 			break;
 		}
