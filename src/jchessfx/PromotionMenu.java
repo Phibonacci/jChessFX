@@ -81,7 +81,7 @@ public class PromotionMenu extends StackPane {
 		}
 	}
 	
-	public PromotionMenu() {
+	public PromotionMenu(int team) {
 		setAlignment(Pos.CENTER);
 		setStyle("-fx-background-color: rgba(32, 32, 32, 0.0)");
 				
@@ -98,10 +98,11 @@ public class PromotionMenu extends StackPane {
 		Image bishopImage;
 		Image rookImage;
 		try {
-			queenImage   = AssetsManager.INSTANCE.getImage("./assets/images/pieces/whiteQueen.png");
-			knightImage  = AssetsManager.INSTANCE.getImage("./assets/images/pieces/whiteKnight.png");
-			bishopImage = AssetsManager.INSTANCE.getImage("./assets/images/pieces/whiteBishop.png");
-			rookImage    = AssetsManager.INSTANCE.getImage("./assets/images/pieces/whiteRook.png");
+			String teamColor = (team == Piece.WHITE ? "white" : "black");
+			queenImage  = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Queen.png");
+			knightImage = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Knight.png");
+			bishopImage = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Bishop.png");
+			rookImage   = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Rook.png");
 			queenImageView  = new ImageView(queenImage);
 			knightImageView = new ImageView(knightImage);
 			bishopImageView = new ImageView(bishopImage);
@@ -142,7 +143,7 @@ public class PromotionMenu extends StackPane {
 	public void resize(double width, double height) {
 		super.resize(width, height);
 
-		double squareWidth = width / ChessBoard.BOARD_WIDTH;
+		double squareWidth  = width  / ChessBoard.BOARD_WIDTH;
 		double squareHeight = height / ChessBoard.BOARD_HEIGHT;
 	
 		double boxWidth = squareWidth * 0.75 * 3 + squareWidth;

@@ -256,7 +256,7 @@ public class ChessBoard extends Pane {
 	}
 	
 	private void promotePawn(PiecePawn pawn) {
-		promotionMenu = new PromotionMenu();
+		promotionMenu = new PromotionMenu(pawn.getTeam());
 
 		getChildren().add(promotionMenu);
 
