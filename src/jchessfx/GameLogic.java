@@ -118,6 +118,7 @@ public class GameLogic {
 		return count;
 	}
 
+	
 	public boolean isPieceAllowedToMoveTo(Piece piece, int x, int y) {
 		if (piece instanceof PieceKing && !piece.hasMoved() && y == piece.getY() && (x == 2 || x == 6)) {
 			if (isAllowedToDoCastling((PieceKing)piece, x, piece.getY())) {
@@ -282,10 +283,19 @@ public class GameLogic {
 		if (!(rook instanceof PieceRook) || rook.hasMoved()) {
 			return false;
 		}
-		if (!checkLineOfSight(rookX, rookY, (x == 2 ? 4 : 4), y)) {
+		if (!checkLineOfSight(rookX, rookY, 4, y)) {
 			return false;
 		}
-		return true;
+
+		int oldX = king.getX();
+		int oldY = king.getY();
+		
+		setPiecePosition(king, x, y);
+		setPiecePosition(rook, (x == 2 ? 3 : 5), y);
+		boolean check = isCheck(king.getTeam());
+		setPiecePosition(king, oldX, oldY);
+		setPiecePosition(rook, rookX, rookY);
+		return !check;
 	}
 	
 	private boolean isAllowedToDoEnPassant(PiecePawn piece, int x, int y) {
@@ -297,7 +307,15 @@ public class GameLogic {
 		if (lastPiece.getMoveCount() == 1 && (lastPiece.getY() == 3 || lastPiece.getY() == 4)                    // LastPiece moved from 2 squares last turn?
 				&& piece.getY() == lastPiece.getY() && Math.abs(piece.getX() - lastPiece.getX()) == 1            // piece juxtaposed on Y?
 				&& y == lastPiece.getY() + (piece.getTeam() == Piece.WHITE ? -1 : 1) && x == lastPiece.getX()) { // diagonal move in the right direction?
-			return true;
+			int oldX = piece.getX();
+			int oldY = piece.getY();
+
+			setPiecePosition(piece, x, y);
+			board[lastPiece.getY()][lastPiece.getX()] = null;
+			boolean check = isCheck(piece.getTeam());
+			setPiecePosition(piece, oldX, oldY);
+			board[lastPiece.getY()][lastPiece.getX()] = lastPiece;
+			return !check;
 		}
 		return false;
 	}
