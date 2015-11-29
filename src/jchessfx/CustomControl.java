@@ -2,7 +2,6 @@ package jchessfx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -38,7 +37,6 @@ public class CustomControl extends Control {
 		getChildren().add(board);
 		getChildren().add(menu);
 
-		menu.setAlignment(Pos.CENTER);
 		menu.setVisible(false);
 		isMenuOpen = false;
 		
