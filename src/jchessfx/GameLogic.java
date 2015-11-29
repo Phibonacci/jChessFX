@@ -282,7 +282,7 @@ public class GameLogic {
 		if (!(rook instanceof PieceRook) || rook.hasMoved()) {
 			return false;
 		}
-		if (!checkLineOfSight(rookX, rookY, (x == 2 ? 3 : 5), y)) {
+		if (!checkLineOfSight(rookX, rookY, (x == 2 ? 4 : 4), y)) {
 			return false;
 		}
 		return true;
