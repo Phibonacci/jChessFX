@@ -38,6 +38,8 @@ public class ChessBoard extends Pane {
 	
 	private GameLogic logic;
 
+	private PromotionMenu promotionMenu;
+	
 	public ChessBoard(StatusBar statusBar) {
 		this.statusBar = statusBar;
 		
@@ -72,7 +74,12 @@ public class ChessBoard extends Pane {
 		super.resize(width, height);
 		cellWidth  = width  / BOARD_WIDTH;
 		cellHeight = height / BOARD_HEIGHT;
-
+		
+		if (promotionMenu != null) {
+			promotionMenu.setMinWidth(width);
+			promotionMenu.setMinHeight(width);
+		}
+		
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
 				squares[i][j].resize(cellWidth, cellHeight);
@@ -149,7 +156,7 @@ public class ChessBoard extends Pane {
 	}
 
 	public void click(final double x, final double y) {
-		if (!logic.isGameRunning()) {
+		if (!logic.isGameRunning() || promotionMenu != null) {
 			return;
 		}
 		if (selected == null) {
@@ -239,13 +246,48 @@ public class ChessBoard extends Pane {
 		}
 		updateSelectableSquares();
 	}
-	
-	private void promotePawn(PiecePawn pawn) {
-		Piece newPiece = new PieceQueen(pawn.getTeam(), pawn.getX(), pawn.getY());
-		
+
+	private void replacePromotedPawn(PiecePawn pawn, Piece newPiece) {
 		board[pawn.getY()][pawn.getX()] = newPiece;
 		getChildren().remove(pawn);
 		getChildren().add(newPiece);
+		getChildren().remove(promotionMenu);
+		promotionMenu = null;
+	}
+	
+	private void promotePawn(PiecePawn pawn) {
+		promotionMenu = new PromotionMenu();
+
+		getChildren().add(promotionMenu);
+
+		promotionMenu.setSpawnQueenAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Piece newPiece = new PieceQueen(pawn.getTeam(), pawn.getX(), pawn.getY());
+				replacePromotedPawn(pawn, newPiece);
+			}
+		});
+		promotionMenu.setSpawnKnightAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Piece newPiece = new PieceKnight(pawn.getTeam(), pawn.getX(), pawn.getY());
+				replacePromotedPawn(pawn, newPiece);
+			}
+		});
+		promotionMenu.setSpawnBishopAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Piece newPiece = new PieceBishop(pawn.getTeam(), pawn.getX(), pawn.getY());
+				replacePromotedPawn(pawn, newPiece);
+			}
+		});
+		promotionMenu.setSpawnRookAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Piece newPiece = new PieceRook(pawn.getTeam(), pawn.getX(), pawn.getY());
+				replacePromotedPawn(pawn, newPiece);
+			}
+		});
 	}
 	
 	private boolean isSelectedPieceAllowedToMoveTo(int x, int y) {
