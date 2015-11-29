@@ -149,6 +149,16 @@ public class GameLogic {
 		return Piece.BLACK;
 	}
 	
+	public boolean canPawnGetPromoted(Piece piece) {
+		if (piece instanceof PiecePawn) {
+			if ((piece.getTeam() == Piece.WHITE && piece.getY() == 0)
+					|| (piece.getTeam() == Piece.BLACK && piece.getY() == 7)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private boolean canPieceMoveTo(Piece piece, int x, int y) {
 		// A non-existing piece cannot move. This is not negotiable.
 		if (piece == null) {
