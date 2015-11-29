@@ -218,9 +218,7 @@ public class ChessBoard extends Pane {
 				// Clear the selected piece.
 				selected.unSelect();
 				
-				if (selected instanceof PiecePawn
-						&& ((selected.getTeam() == Piece.WHITE && selected.getY() == 0)
-								|| (selected.getTeam() == Piece.BLACK && selected.getY() == 7))) {
+				if (canPawnGetPromoted(selected)) {
 					promotePawn((PiecePawn)selected);
 				}
 				
@@ -242,6 +240,14 @@ public class ChessBoard extends Pane {
 		updateSelectableSquares();
 	}
 
+	private boolean canPawnGetPromoted(Piece piece) {
+		if (piece instanceof PiecePawn
+		&& ((piece.getTeam() == Piece.WHITE && piece.getY() == 0)
+				|| (piece.getTeam() == Piece.BLACK && piece.getY() == 7))) {
+			return true;
+		}
+		return false;
+	}
 	
 	private void promotePawn(PiecePawn pawn) {
 		Piece newPiece = new PieceQueen(pawn.getTeam(), pawn.getX(), pawn.getY());
