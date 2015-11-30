@@ -97,7 +97,6 @@ public class GameLogic {
 			gameState = STATE_STALEMATE;
 		} else if (check) {
 			gameState = STATE_CHECK;
-			updateKingCheck(nextPlayer);
 			currentPlayer = nextPlayer;
 		} else {
 			gameState = STATE_PLAYING;
@@ -106,16 +105,6 @@ public class GameLogic {
 		}
 	}
 	
-	private void updateKingCheck(int team) {
-		for (int j = 0; j < ChessBoard.BOARD_HEIGHT; j++) {
-			for (int i = 0; i < ChessBoard.BOARD_WIDTH; i++) {
-				if (board[j][i] instanceof PieceKing && board[j][i].getTeam() == team) {
-					((PieceKing)board[j][i]).setCheck();
-				}
-			}
-		}
-	}
-
 	public int getRemainingPiecesCount(int player) {
 		int count = 0;
 		for (int x = 0; x < ChessBoard.BOARD_WIDTH; ++x) {
@@ -297,7 +286,7 @@ public class GameLogic {
 	}
 	
 	private boolean isAllowedToDoCastling(PieceKing king, int x, int y) {
-		if (king.hasMoved() || king.hasBeenChecked() || (x != 2 && x != 6)) {
+		if (king.hasMoved() || isCheck(king.getTeam()) || (x != 2 && x != 6)) {
 			return false;
 		}
 		final int rookY = (currentPlayer == Piece.WHITE ? 7 : 0);
