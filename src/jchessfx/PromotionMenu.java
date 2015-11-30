@@ -51,8 +51,8 @@ public class PromotionMenu extends StackPane {
 		public void resize(double width, double height) {
 			super.resize(width, height);
 			
-			double buttonWidth  = (width / 1.1) / (3.25);
-			double buttonHeight = height / 1.1;
+			double buttonWidth  = width / (3.25);
+			double buttonHeight = height;
 			
 			queenButton. setPrefSize(buttonWidth, buttonHeight);
 			knightButton.setPrefSize(buttonWidth * 0.75, buttonHeight * 0.75);
@@ -125,8 +125,8 @@ public class PromotionMenu extends StackPane {
 		double squareHeight = height / ChessBoard.BOARD_HEIGHT;
 	
 		// 1.1 sets a margin
-		double boxWidth = (squareWidth * 0.75 * 3 + squareWidth) * 1.1;
-		double boxHeight = squareHeight * 1.1;
+		double boxWidth = (squareWidth * 0.75 * 3 + squareWidth);
+		double boxHeight = squareHeight;
 	
 		hbox.setMinWidth (boxWidth);
 		hbox.setMaxWidth (boxWidth);
