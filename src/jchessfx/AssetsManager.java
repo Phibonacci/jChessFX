@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import javafx.scene.text.Font;
 
 public enum AssetsManager {

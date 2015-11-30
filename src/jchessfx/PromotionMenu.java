@@ -99,10 +99,10 @@ public class PromotionMenu extends StackPane {
 		Image rookImage;
 		try {
 			String teamColor = (team == Piece.WHITE ? "white" : "black");
-			queenImage  = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Queen.png");
-			knightImage = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Knight.png");
-			bishopImage = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Bishop.png");
-			rookImage   = AssetsManager.INSTANCE.getImage("./assets/images/pieces/" + teamColor + "Rook.png");
+			queenImage  = AssetsManager.INSTANCE.getImage("/assets/images/pieces/" + teamColor + "Queen.png");
+			knightImage = AssetsManager.INSTANCE.getImage("/assets/images/pieces/" + teamColor + "Knight.png");
+			bishopImage = AssetsManager.INSTANCE.getImage("/assets/images/pieces/" + teamColor + "Bishop.png");
+			rookImage   = AssetsManager.INSTANCE.getImage("/assets/images/pieces/" + teamColor + "Rook.png");
 			queenImageView  = new ImageView(queenImage);
 			knightImageView = new ImageView(knightImage);
 			bishopImageView = new ImageView(bishopImage);
