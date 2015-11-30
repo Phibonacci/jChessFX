@@ -13,7 +13,7 @@ public abstract class Piece extends Group {
 	public static final int WHITE = 1;
 	public static final int BLACK = 2;
 	
-	public static final String IMAGES_PATH = "./assets/images/pieces/";
+	public static final String IMAGES_PATH = "/assets/images/pieces/";
 	
 	private int   team;
 	private Image image;

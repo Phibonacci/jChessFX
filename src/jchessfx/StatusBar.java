@@ -19,7 +19,7 @@ public class StatusBar extends HBox {
 		statusLabel = new Label();
 
 		try {
-			Font font = AssetsManager.INSTANCE.getFont("assets/fonts/monofonto.ttf", 18);
+			Font font = AssetsManager.INSTANCE.getFont("/assets/fonts/monofonto.ttf", 18);
 			statusLabel.setFont(font);
 		} catch (Exception e) {
 		}
