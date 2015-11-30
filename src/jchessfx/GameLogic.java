@@ -97,6 +97,7 @@ public class GameLogic {
 			gameState = STATE_STALEMATE;
 		} else if (check) {
 			gameState = STATE_CHECK;
+			updateKingCheck(nextPlayer);
 			currentPlayer = nextPlayer;
 		} else {
 			gameState = STATE_PLAYING;
@@ -105,6 +106,16 @@ public class GameLogic {
 		}
 	}
 	
+	private void updateKingCheck(int team) {
+		for (int j = 0; j < ChessBoard.BOARD_HEIGHT; j++) {
+			for (int i = 0; i < ChessBoard.BOARD_WIDTH; i++) {
+				if (board[j][i] instanceof PieceKing && board[j][i].getTeam() == team) {
+					((PieceKing)board[j][i]).setCheck();
+				}
+			}
+		}
+	}
+
 	public int getRemainingPiecesCount(int player) {
 		int count = 0;
 		for (int x = 0; x < ChessBoard.BOARD_WIDTH; ++x) {
@@ -272,9 +283,19 @@ public class GameLogic {
 		}
 		return false;
 	} 
+
+	private boolean isNextMoveAChess(Piece piece, int x, int y) {
+		int oldX = piece.getX();
+		int oldY = piece.getY();
+		
+		setPiecePosition(piece, x, y);
+		boolean check = isCheck(piece.getTeam());
+		setPiecePosition(piece, oldX, oldY);
+		return check;
+	}
 	
 	private boolean isAllowedToDoCastling(PieceKing king, int x, int y) {
-		if (king.hasMoved() || (x != 2 && x != 6)) {
+		if (king.hasMoved() || king.hasBeenChecked() || (x != 2 && x != 6)) {
 			return false;
 		}
 		final int rookY = (currentPlayer == Piece.WHITE ? 7 : 0);
@@ -287,15 +308,13 @@ public class GameLogic {
 			return false;
 		}
 
-		int oldX = king.getX();
-		int oldY = king.getY();
-		
-		setPiecePosition(king, x, y);
-		setPiecePosition(rook, (x == 2 ? 3 : 5), y);
-		boolean check = isCheck(king.getTeam());
-		setPiecePosition(king, oldX, oldY);
-		setPiecePosition(rook, rookX, rookY);
-		return !check;
+		int direction = (x == 2 ? -1 : 1);
+		for (int i = king.getX() + direction; i != x + direction; i++) {
+			if (isNextMoveAChess(king, i, y)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private boolean isAllowedToDoEnPassant(PiecePawn piece, int x, int y) {
