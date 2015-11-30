@@ -17,7 +17,6 @@ public enum AssetsManager {
 	
 	private AssetsManager() {
 		images     = new HashMap<String, Image>();
-		audioClips = new HashMap<String, AudioClip>();
 		fonts      = new HashMap<String, Font>();
 	}
 	
