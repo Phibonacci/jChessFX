@@ -10,12 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 public class GameMenu extends VBox {
-	
-	private static final String BUTTON_STYLE
-		= "-fx-text-fill: white;"
-		+ "-fx-background-color: #454545;"
-		+ "-fx-font-size: 150%;";
-	
 	private Button resumeButton;
 	private Button restartButton;
 	private Button exitButton;
@@ -35,9 +29,9 @@ public class GameMenu extends VBox {
 		restartButton.setPrefWidth(Integer.MAX_VALUE);
 		exitButton   .setPrefWidth(Integer.MAX_VALUE);
 
-		resumeButton .setStyle(BUTTON_STYLE);
-		restartButton.setStyle(BUTTON_STYLE);
-		exitButton   .setStyle(BUTTON_STYLE);
+		resumeButton .getStyleClass().add("menu-button");
+		restartButton.getStyleClass().add("menu-button");
+		exitButton   .getStyleClass().add("menu-button");
 
 		resumeButton .setCursor(Cursor.HAND);
 		restartButton.setCursor(Cursor.HAND);

@@ -52,8 +52,13 @@ public class ChessApplication extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
+		// Create a new scene and add our default CSS stylesheet.
+		Scene scene = new Scene(mainLayout, WINDOW_WIDTH, WINDOW_HEIGHT);
+		scene.getStylesheets().add(getClass().getResource("/assets/style/default.css").toString());
+		
+		// Set the stage information and display it.
 		primaryStage.setTitle("jChessFX");
-		primaryStage.setScene(new Scene(mainLayout, WINDOW_WIDTH, WINDOW_HEIGHT));
+		primaryStage.setScene(scene);
 		primaryStage.setMinHeight(WINDOW_MIN_WIDTH);
 		primaryStage.setMinWidth(WINDOW_MIN_HEIGHT);
 		primaryStage.show();
