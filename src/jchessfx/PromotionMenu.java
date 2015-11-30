@@ -4,9 +4,6 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,11 +17,6 @@ public class PromotionMenu extends StackPane {
 	private Button bishopButton;
 	private Button rookButton;
 
-	private static final String BUTTON_STYLE
-	= "-fx-text-fill: white;"
-	+ "-fx-font-size: 100%;"
-	+ "-fx-background-color: rgba(0, 0, 0, 0)";
-	
 	ImageView queenImageView;
 	ImageView knightImageView;
 	ImageView bishopImageView;
@@ -38,9 +30,7 @@ public class PromotionMenu extends StackPane {
 		public ImageButton(ImageView imageView) {
 			super("", imageView);
 			this.imageView = imageView;
-			setPadding(Insets.EMPTY);
-			setStyle(BUTTON_STYLE);
-
+			getStyleClass().add("game-promotion-button");
 		}
 		
 		@Override
@@ -82,16 +72,8 @@ public class PromotionMenu extends StackPane {
 	}
 	
 	public PromotionMenu(int team) {
-		setAlignment(Pos.CENTER);
-		setStyle("-fx-background-color: rgba(32, 32, 32, 0.0)");
-				
 		hbox = new PromotionHBox(0);
-		
-		hbox.setSpacing(0);
-		hbox.setAlignment(Pos.CENTER);
-		hbox.setStyle("-fx-background-color: rgba(36, 36, 36, 0.5)");
-		//hbox.setMaxSize(320, 128);
-		hbox.setPadding(new Insets(16, 16, 16, 16));
+		hbox.getStyleClass().add("game-promotion");
 		
 		Image queenImage;
 		Image knightImage;
@@ -109,15 +91,11 @@ public class PromotionMenu extends StackPane {
 			rookImageView   = new ImageView(rookImage);
 			queenButton   = new ImageButton(queenImageView);
 			knightButton  = new ImageButton(knightImageView);
-			bishopButton = new ImageButton(bishopImageView);
+			bishopButton  = new ImageButton(bishopImageView);
 			rookButton    = new ImageButton(rookImageView);
 			hbox.getChildren().addAll(queenButton, knightButton, bishopButton, rookButton);
-			for (Node child : hbox.getChildren()) {
-				HBox.setMargin(child, new Insets(0));
-			}
-
 		} catch (IOException e) {
-			System.err.println(e.getMessage());
+			e.printStackTrace();
 		}
 		getChildren().add(hbox);
 	

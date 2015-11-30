@@ -3,9 +3,6 @@ package jchessfx;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -16,10 +13,8 @@ public class GameMenu extends VBox {
 	
 	public GameMenu() {
 		setMaxSize(320, 128);
-		setPadding(new Insets(16, 16, 16, 16));
-		setSpacing(8);
-		setAlignment(Pos.CENTER);
-		setStyle("-fx-background-color: rgba(32, 32, 32, 0.5)");
+		
+		getStyleClass().add("game-menu");
 		
 		resumeButton  = new Button("Resume");
 		restartButton = new Button("Restart");
@@ -28,14 +23,6 @@ public class GameMenu extends VBox {
 		resumeButton .setPrefWidth(Integer.MAX_VALUE);
 		restartButton.setPrefWidth(Integer.MAX_VALUE);
 		exitButton   .setPrefWidth(Integer.MAX_VALUE);
-
-		resumeButton .getStyleClass().add("menu-button");
-		restartButton.getStyleClass().add("menu-button");
-		exitButton   .getStyleClass().add("menu-button");
-
-		resumeButton .setCursor(Cursor.HAND);
-		restartButton.setCursor(Cursor.HAND);
-		exitButton   .setCursor(Cursor.HAND);
 
 		getChildren().addAll(resumeButton, restartButton, exitButton);
 		

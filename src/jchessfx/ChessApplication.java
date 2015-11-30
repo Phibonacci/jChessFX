@@ -41,7 +41,8 @@ public class ChessApplication extends Application {
 		
 		mainLayout = new VBox();
 		mainLayout.getChildren().addAll(mainControl, statusBar);
-		mainLayout.setStyle("-fx-background-color: #f0f0f0");
+		
+		mainLayout.getStyleClass().add("game-window");
 	}
 
 	/**

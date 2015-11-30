@@ -1,7 +1,6 @@
 package jchessfx;
 
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Square extends Group {
@@ -12,9 +11,6 @@ public class Square extends Group {
 		this.shape = new Rectangle();
 		this.team  = team;
 
-		shape.setStroke(Color.rgb(128, 128, 128));
-		shape.setStrokeWidth(1.0);
-		
 		getChildren().addAll(shape);
 		setSelectable(false);
 	}
@@ -27,12 +23,12 @@ public class Square extends Group {
 	}
 	
 	public void setSelectable(boolean selectable) {
-		Color color = null;
-		if (team == Piece.WHITE) {
-			color = selectable ? Color.LIGHTGREEN : Color.WHITE;
-		} else if (team == Piece.BLACK) {
-			color = selectable ? Color.FORESTGREEN : Color.DARKGRAY;
+		String style = "game-square";
+		if (selectable) {
+			style += "-selectable";
 		}
-		shape.setFill(color);
+		style += (team == Piece.WHITE ? "-white" : "-black");
+		shape.getStyleClass().clear();
+		shape.getStyleClass().add(style);
 	}
 }

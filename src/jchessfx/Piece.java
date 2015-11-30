@@ -1,13 +1,12 @@
 package jchessfx;
 
-import javafx.scene.Group;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public abstract class Piece extends Group {
+public abstract class Piece extends Pane {
 
 	public static final int EMPTY = 0;
 	public static final int WHITE = 1;
@@ -89,26 +88,16 @@ public abstract class Piece extends Group {
 		return team;
 	}
 	
-	private void setBrightness(double brightness) {
-		ColorAdjust effect = new ColorAdjust();
-		effect.setBrightness(brightness);
-		if (image == null) {
-			rectangle.setEffect(effect);
-		} else {
-			imageView.setEffect(effect);
-		}
-	}
-	
 	public void select() {
-		if (team == Piece.WHITE) {
-			setBrightness(-0.5);
-		} else {
-			setBrightness(0.25);
+		if (imageView != null) {
+			getStyleClass().add("game-piece-selected");
 		}
 	}
 	
 	public void unSelect() {
-		setBrightness(0);
+		if (imageView != null) {
+			getStyleClass().remove("game-piece-selected");
+		}
 	}
 	
 	
