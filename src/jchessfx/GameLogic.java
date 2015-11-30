@@ -288,9 +288,11 @@ public class GameLogic {
 		int oldX = piece.getX();
 		int oldY = piece.getY();
 		
+		Piece target = board[y][x];
 		setPiecePosition(piece, x, y);
 		boolean check = isCheck(piece.getTeam());
 		setPiecePosition(piece, oldX, oldY);
+		board[y][x] = target;
 		return check;
 	}
 	
@@ -309,7 +311,8 @@ public class GameLogic {
 		}
 
 		int direction = (x == 2 ? -1 : 1);
-		for (int i = king.getX() + direction; i != x + direction; i++) {
+		for (int i = king.getX() + direction; i != x + direction; i += direction) {
+			System.out.println("i=" + i + "\t(" + x + ")");
 			if (isNextMoveAChess(king, i, y)) {
 				return false;
 			}
