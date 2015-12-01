@@ -10,7 +10,7 @@ public class GameLogic {
 	public static final int STATE_TIMESUP   = 4;
 	
 	// Private constants
-	private static final int TIMER_DURATION = 5 * 1; // 15 minutes
+	private static final int TIMER_DURATION = 15 * 60; // 15 minutes
 	
 	// Private fields
 	private Piece[][] board;
