@@ -7,9 +7,10 @@ public class GameLogic {
 	public static final int STATE_CHECK     = 1;
 	public static final int STATE_CHECKMATE = 2;
 	public static final int STATE_STALEMATE = 3;
+	public static final int STATE_TIMESUP   = 4;
 	
 	// Private constants
-	private static final int TIMER_DURATION = 15 * 60; // 15 minutes
+	private static final int TIMER_DURATION = 5 * 1; // 15 minutes
 	
 	// Private fields
 	private Piece[][] board;
@@ -74,6 +75,9 @@ public class GameLogic {
 	
 	public void tickTimer() {
 		remainingSeconds[currentPlayer] -= 1;
+		if (remainingSeconds[currentPlayer] == 0) {
+			gameState = STATE_TIMESUP;
+		}
 	}
 	
 	public void setPiecePosition(Piece piece, int x, int y) {

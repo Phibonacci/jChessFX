@@ -380,7 +380,22 @@ public class ChessBoard extends Pane {
 		if (logic.isGameRunning()) {
 			logic.tickTimer();
 			updateStatus();
+			if (logic.getGameState() == GameLogic.STATE_TIMESUP) {
+				gameOver();
+			}
 		}
+	}
+	
+	private void gameOver() {
+		if (selected != null) {
+			selected.unSelect();
+			selected = null;
+		}
+		if (promotionMenu != null) {
+			getChildren().remove(promotionMenu);
+			promotionMenu = null;
+		}
+		updateSelectableSquares();
 	}
 	
 	private void updateStatus() {
