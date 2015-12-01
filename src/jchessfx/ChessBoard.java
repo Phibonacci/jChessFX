@@ -106,6 +106,12 @@ public class ChessBoard extends Pane {
 		}
 		activeAnimations.clear();
 		
+		// Close the promotion menu if existing.
+		if (promotionMenu != null) {
+			getChildren().remove(promotionMenu);
+			promotionMenu = null;
+		}
+		
 		selected = null;
 		timer.stop();
 		for(int i = 0; i < board.length; i++) {
