@@ -43,6 +43,9 @@ public class StatusBar extends HBox {
 		case GameLogic.STATE_STALEMATE:
 			separator = " | Stalemate | ";
 			break;
+		case GameLogic.STATE_TIMESUP:
+			separator = " | Time's up! | ";
+			break;
 		}
 		String status = remainingWhite + " - " + whiteTime + separator + blackTime + " - " + remainingBlack;
 		if (board.getCurrentPlayer() == Piece.WHITE) {

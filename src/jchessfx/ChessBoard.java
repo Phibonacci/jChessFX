@@ -106,6 +106,12 @@ public class ChessBoard extends Pane {
 		}
 		activeAnimations.clear();
 		
+		// Close the promotion menu if existing.
+		if (promotionMenu != null) {
+			getChildren().remove(promotionMenu);
+			promotionMenu = null;
+		}
+		
 		selected = null;
 		timer.stop();
 		for(int i = 0; i < board.length; i++) {
@@ -227,10 +233,13 @@ public class ChessBoard extends Pane {
 				
 				if (logic.canPawnGetPromoted(selected)) {
 					promotePawn((PiecePawn)selected);
+				} else {
+					// in case of promote, the updateGameState is only applied
+					// once a new piece is selected
+					logic.updateGameState();
 				}
 				
 				selected = null;
-				logic.updateGameState();
 				
 				// Reset the timer.
 				timer.stop();
@@ -253,6 +262,8 @@ public class ChessBoard extends Pane {
 		getChildren().add(newPiece);
 		getChildren().remove(promotionMenu);
 		promotionMenu = null;
+		logic.updateGameState();
+		updateStatus();
 	}
 	
 	private void promotePawn(PiecePawn pawn) {
@@ -380,7 +391,22 @@ public class ChessBoard extends Pane {
 		if (logic.isGameRunning()) {
 			logic.tickTimer();
 			updateStatus();
+			if (logic.getGameState() == GameLogic.STATE_TIMESUP) {
+				gameOver();
+			}
 		}
+	}
+	
+	private void gameOver() {
+		if (selected != null) {
+			selected.unSelect();
+			selected = null;
+		}
+		if (promotionMenu != null) {
+			getChildren().remove(promotionMenu);
+			promotionMenu = null;
+		}
+		updateSelectableSquares();
 	}
 	
 	private void updateStatus() {
