@@ -233,10 +233,13 @@ public class ChessBoard extends Pane {
 				
 				if (logic.canPawnGetPromoted(selected)) {
 					promotePawn((PiecePawn)selected);
+				} else {
+					// in case of promote, the updateGameState is only applied
+					// once a new piece is selected
+					logic.updateGameState();
 				}
 				
 				selected = null;
-				logic.updateGameState();
 				
 				// Reset the timer.
 				timer.stop();
@@ -259,6 +262,8 @@ public class ChessBoard extends Pane {
 		getChildren().add(newPiece);
 		getChildren().remove(promotionMenu);
 		promotionMenu = null;
+		logic.updateGameState();
+		updateStatus();
 	}
 	
 	private void promotePawn(PiecePawn pawn) {

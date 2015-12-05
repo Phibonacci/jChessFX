@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 /**
  * A simple Chess application, made using JavaFX.
  * 
- * @version 0.5a
+ * @version 0.6b
  * @author Jean Fauquenot, Paul-Maxime Le Duc
  */
 public class ChessApplication extends Application {
