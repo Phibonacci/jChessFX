@@ -28,6 +28,7 @@ public class ChessBoard extends Pane {
 	private Piece[][]  board;
 	private Square[][] squares;
 	private Piece selected;
+	private boolean dragging;
 	
 	private Timeline timer;
 	
@@ -86,7 +87,9 @@ public class ChessBoard extends Pane {
 				squares[i][j].relocate(j * cellWidth, i * cellHeight);
 				if (board[i][j] != null) {
 					board[i][j].resize(cellWidth, cellHeight);
-					board[i][j].relocate(j * cellWidth, i * cellHeight);
+					if (!dragging || selected != board[i][j]) {
+						board[i][j].relocate(j * cellWidth, i * cellHeight);
+					}
 				}
 			}
 		}
@@ -112,6 +115,7 @@ public class ChessBoard extends Pane {
 			promotionMenu = null;
 		}
 		
+		dragging = false;
 		selected = null;
 		timer.stop();
 		for(int i = 0; i < board.length; i++) {
@@ -170,6 +174,31 @@ public class ChessBoard extends Pane {
 		} else {
 			placePiece(x, y);
 		}
+	}
+	
+	public void dragEnter(final double x, final double y) {
+		if (!logic.isGameRunning() || promotionMenu != null) {
+			return;
+		}
+		if (selected == null) {
+			selectPiece(x, y);
+		}
+		dragging = true;
+	}
+
+	public void drag(final double x, final double y) {
+		if (!logic.isGameRunning() || promotionMenu != null || selected == null) {
+			dragging = false;
+			return;
+		}
+		selected.relocate(x - cellWidth / 2, y - cellHeight / 2);
+	}
+	
+	public void dragRelease(final double x, final double y) {
+		if (!logic.isGameRunning() || promotionMenu != null || dragging == false) {
+			return;
+		}
+		placePiece(x, y);
 	}
 	
 	public void selectPiece(final double x, final double y) {
@@ -334,8 +363,12 @@ public class ChessBoard extends Pane {
 		path.getElements().add(new LineTo(originX, originY));
 		
 		// Create and play the transition animation!
-		PathTransition pathTransition = new PathTransition(duration, path, piece);
-		pathTransition.play();
+		if (dragging == false) {
+			PathTransition pathTransition = new PathTransition(duration, path, piece);
+			pathTransition.play();
+		} else {
+			dragging = false;
+		}
 		
 		// Run the fade-out animation as soon as we hit the target piece.
 		if (target != null) {
