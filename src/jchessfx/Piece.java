@@ -34,21 +34,22 @@ public abstract class Piece extends Pane {
 		try {
 			image     = AssetsManager.INSTANCE.getImage(imagePath);
 			imageView = new ImageView(image);
+			imageView.fitWidthProperty().bind(widthProperty());
+			imageView.fitHeightProperty().bind(heightProperty());
 			getChildren().add(imageView);
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			rectangle = new Rectangle();
 			rectangle.setFill(Color.PINK);
+			rectangle.widthProperty().bind(widthProperty());
+			rectangle.heightProperty().bind(heightProperty());
 			getChildren().add(rectangle);
 		}
 
 	}
 
 	public boolean hasMoved() {
-		if (moveCount == 0) {
-			return false;
-		}
-		return true;
+		return (moveCount != 0);
 	}
 	
 	public int getMoveCount() {
@@ -59,24 +60,12 @@ public abstract class Piece extends Pane {
 		moveCount++;
 	}
 
-	public void removeMoveCount() {
-		moveCount--;
-	}
-	
 	public int getX() {
 		return x;
 	}
 	
 	public int getY() {
 		return y;
-	}
-	
-	public void setX(int value) {
-		x = value;
-	}
-	
-	public void setY(int value) {
-		y = value;
 	}
 	
 	public void setPosition(int x, int y) {
@@ -89,30 +78,13 @@ public abstract class Piece extends Pane {
 	}
 	
 	public void select() {
-		if (imageView != null) {
-			getStyleClass().add("game-piece-selected");
-		}
+		getStyleClass().add("game-piece-selected");
 	}
 	
 	public void unSelect() {
-		if (imageView != null) {
-			getStyleClass().remove("game-piece-selected");
-		}
+		getStyleClass().remove("game-piece-selected");
 	}
 	
-	
-	@Override
-	public void resize(double width, double height) {
-		super.resize(width, height);
-		if (image == null) {
-			rectangle.setWidth(width);
-			rectangle.setHeight(height);
-		} else {
-			imageView.setFitWidth(width);
-			imageView.setFitHeight(height);
-		}
-	}
-
 	public abstract boolean canMoveTo(int x, int y);
 	
 	public boolean canCaptureTo(int x, int y) {
