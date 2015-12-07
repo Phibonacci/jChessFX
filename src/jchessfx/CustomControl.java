@@ -67,16 +67,7 @@ public class CustomControl extends Control {
 				}
 			}
 		});
-		
-		board.setOnMouseDragReleased(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (!isMenuOpen) {
-					board.dragRelease(event.getX(), event.getY());
-				}
-			}
-		});
-		
+				
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
