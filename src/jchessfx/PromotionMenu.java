@@ -30,7 +30,6 @@ public class PromotionMenu extends StackPane {
 		public ImageButton(ImageView imageView) {
 			super("", imageView);
 			this.imageView = imageView;
-			getStyleClass().add("game-promotion-button");
 		}
 		
 		@Override

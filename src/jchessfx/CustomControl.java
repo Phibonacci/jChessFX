@@ -3,6 +3,7 @@ package jchessfx;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Control;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +50,24 @@ public class CustomControl extends Control {
 			}
 		});
 		
+		board.setOnDragDetected(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (!isMenuOpen) {
+					board.dragEnter(event.getX(), event.getY());
+				}
+			}
+		});
+
+		board.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (!isMenuOpen) {
+					board.drag(event.getX(), event.getY());
+				}
+			}
+		});
+				
 		setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {

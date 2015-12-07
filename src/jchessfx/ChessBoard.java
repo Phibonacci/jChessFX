@@ -28,6 +28,7 @@ public class ChessBoard extends Pane {
 	private Piece[][]  board;
 	private Square[][] squares;
 	private Piece selected;
+	private boolean dragging;
 	
 	private Timeline timer;
 	
@@ -86,7 +87,9 @@ public class ChessBoard extends Pane {
 				squares[i][j].relocate(j * cellWidth, i * cellHeight);
 				if (board[i][j] != null) {
 					board[i][j].resize(cellWidth, cellHeight);
-					board[i][j].relocate(j * cellWidth, i * cellHeight);
+					if (!dragging || selected != board[i][j]) {
+						board[i][j].relocate(j * cellWidth, i * cellHeight);
+					}
 				}
 			}
 		}
@@ -112,6 +115,7 @@ public class ChessBoard extends Pane {
 			promotionMenu = null;
 		}
 		
+		dragging = false;
 		selected = null;
 		timer.stop();
 		for(int i = 0; i < board.length; i++) {
@@ -169,6 +173,37 @@ public class ChessBoard extends Pane {
 			selectPiece(x, y);
 		} else {
 			placePiece(x, y);
+			dragging = false;
+		}
+	}
+	
+	public void dragEnter(final double x, final double y) {
+		if (!logic.isGameRunning() || promotionMenu != null) {
+			return;
+		}
+		if (selected == null) {
+			selectPiece(x, y);
+		}
+		dragging = true;
+	}
+
+	public void drag(double x, double y) {
+		if (!logic.isGameRunning() || promotionMenu != null || selected == null) {
+			dragging = false;
+			return;
+		}
+		if (x > BOARD_WIDTH * cellWidth) {
+			x = BOARD_WIDTH * cellWidth;
+		} else if (x < 0) {
+			x = 0;
+		}
+		if (y > BOARD_HEIGHT * cellHeight) {
+			y = BOARD_HEIGHT * cellHeight;
+		} else if (y < 0) {
+			y = 0;
+		}
+		if (x >= 0 && x <= BOARD_WIDTH * cellWidth && y >= 0 && y <= BOARD_HEIGHT * cellHeight) {
+			selected.relocate(x - cellWidth / 2, y - cellHeight / 2);
 		}
 	}
 	
@@ -180,6 +215,7 @@ public class ChessBoard extends Pane {
 		if (target != null && logic.getCurrentPlayer() == target.getTeam()) {
 			target.select();
 			selected = target;
+			selected.toFront();
 		} 
 		updateSelectableSquares();
 	}
@@ -212,7 +248,11 @@ public class ChessBoard extends Pane {
 					final int oldRookPositionY = rook.getY();
 					logic.setPiecePosition(rook, (indexx == 2 ? 3 : 5), indexy);
 					rook.addMoveCount();
-					addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
+					if (dragging && target != null) {
+						addFadeoutAnimation(target);
+					} else if (!dragging) {
+						addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
+					}
 					addTransitionAnimation(rook, null, oldRookPositionX, oldRookPositionY);
 				} else if (selected instanceof PiecePawn && target == null && indexx != oldPositionX) { // En passant
 					final int pawnY = oldPositionY;
@@ -220,10 +260,18 @@ public class ChessBoard extends Pane {
 
 					Piece pawn = board[pawnY][pawnX];
 					board[pawnY][pawnX] = null;
-					addTransitionAnimation(selected, pawn, oldPositionX, oldPositionY);
+					if (dragging) {
+						addFadeoutAnimation(pawn);
+					} else if (!dragging) {
+						addTransitionAnimation(selected, pawn, oldPositionX, oldPositionY);
+					}
 				} else {
 					// Add the animation.
-					addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
+					if (dragging && target != null) {
+						addFadeoutAnimation(target);
+					} else if (!dragging) {
+						addTransitionAnimation(selected, target, oldPositionX, oldPositionY);
+					}
 				}
 				
 				logic.setLastMovedPiece(selected);
