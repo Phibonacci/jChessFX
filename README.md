@@ -1,4 +1,4 @@
-version: 0.6b
+version: 1.0
 
 jChessFX is a chess game written with Java and using the JavaFX library.  
 This is a project of Griffith College Dublin for the GUI class.
@@ -12,3 +12,13 @@ This is a project of Griffith College Dublin for the GUI class.
   - 100% Checkmate (20%)
   - 100% GUI (reset, team playing, pieces left, game state) (15%)
   - 100% Timers (15%)
+
+# Bonus
+  - Move animation
+  - Capture animation
+  - Drag & Drop
+  - Castling
+  - En passant
+  - Menu (press escape)
+
+See commit-messages file.
