@@ -4,7 +4,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 
 public class StatusBar extends HBox {
 	
@@ -12,18 +11,12 @@ public class StatusBar extends HBox {
 	private Label statusLabel;
 	
 	public StatusBar() {
+		getStyleClass().add("game-statusbar");
 		setAlignment(Pos.CENTER);
-		setPadding(new Insets(8));
 		setPrefWidth(Integer.MAX_VALUE);
 		
 		statusLabel = new Label();
-
-		try {
-			Font font = AssetsManager.INSTANCE.getFont("/assets/fonts/monofonto.ttf", 18);
-			statusLabel.setFont(font);
-		} catch (Exception e) {
-		}
-	    
+		
 		getChildren().addAll(statusLabel);
 	}
 	
