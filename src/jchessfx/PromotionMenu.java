@@ -10,6 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+/**
+ * Promotion menu, spawning whenever a pawn reach the maximum rank.
+ * Contains four buttons to allow the player to chose the desired evolution.
+ */
 public class PromotionMenu extends StackPane {
 	
 	private Button queenButton;

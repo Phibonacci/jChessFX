@@ -7,13 +7,18 @@ import java.util.Map;
 
 import javafx.scene.image.Image;
 
+/**
+ * Singleton containing a cache of the images used by the game,
+ * to prevent the operating system from reading them from the disk
+ * more than once.
+ */
 public enum AssetsManager {
 	INSTANCE;
 	
-	private Map<String, Image>     images;
+	private Map<String, Image> images;
 	
 	private AssetsManager() {
-		images     = new HashMap<String, Image>();
+		images = new HashMap<String, Image>();
 	}
 	
 	public Image getImage(String path) throws IOException {

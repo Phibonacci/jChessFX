@@ -6,6 +6,11 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
+/**
+ * Menu of the game. Consists of a simple VBox with three buttons.
+ * Does not contain any information about the game, the parent element should
+ * set the resume and restart actions in order for them to work.
+ */
 public class GameMenu extends VBox {
 	private Button resumeButton;
 	private Button restartButton;
