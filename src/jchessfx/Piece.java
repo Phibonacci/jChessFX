@@ -6,6 +6,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Base class representing any piece of the board.
+ * Contains both the graphical representation of the element and the base logic.
+ * The logic should be implemented in sub classes.
+ */
 public abstract class Piece extends Pane {
 
 	public static final int EMPTY = 0;

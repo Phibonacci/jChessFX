@@ -19,10 +19,17 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
+/**
+ * Represents the graphical view of the game board.
+ * Executes the logic of the game and the various animations.
+ */
 public class ChessBoard extends Pane {
+	
+	// Public constants
 	public static final int BOARD_WIDTH  = 8;
 	public static final int BOARD_HEIGHT = 8;
 	
+	// Private members
 	private double cellWidth;
 	private double cellHeight;
 	private Piece[][]  board;
@@ -35,12 +42,10 @@ public class ChessBoard extends Pane {
 	private List<Timeline> activeAnimations;
 	private List<Piece>    orphanPieces;
 
-	private StatusBar statusBar;
-	
-	private GameLogic logic;
-
+	private GameLogic     logic;
+	private StatusBar     statusBar;
 	private PromotionMenu promotionMenu;
-	
+
 	public ChessBoard(StatusBar statusBar) {
 		this.statusBar = statusBar;
 		

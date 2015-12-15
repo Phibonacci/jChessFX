@@ -1,32 +1,34 @@
 package jchessfx;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 
+/**
+ * Status bar of the game, display information about the current board logic as text.
+ */
 public class StatusBar extends HBox {
 	
 	// Private fields
 	private Label statusLabel;
 	
+	/**
+	 * Initializes the status bar control and sub controls, especially the label.
+	 */
 	public StatusBar() {
+		getStyleClass().add("game-statusbar");
 		setAlignment(Pos.CENTER);
-		setPadding(new Insets(8));
 		setPrefWidth(Integer.MAX_VALUE);
 		
 		statusLabel = new Label();
-
-		try {
-			Font font = AssetsManager.INSTANCE.getFont("/assets/fonts/monofonto.ttf", 18);
-			statusLabel.setFont(font);
-		} catch (Exception e) {
-		}
-	    
+		
 		getChildren().addAll(statusLabel);
 	}
 	
+	/**
+	 * Updates the internal label with information about the game logic.
+	 * @param board Logic of the current game board.
+	 */
 	public void updateStatus(GameLogic board) {
 		String remainingWhite = board.getRemainingPiecesCount(Piece.WHITE) + "/16";
 		String remainingBlack = board.getRemainingPiecesCount(Piece.BLACK) + "/16";
@@ -56,6 +58,11 @@ public class StatusBar extends HBox {
 		statusLabel.setText(status);
 	}
 	
+	/**
+	 * Converts a number of seconds into a pretty time value, like "08:54".
+	 * @param seconds Amount of seconds to translate.
+	 * @return A new formatted string.
+	 */
 	private String secondsToTime(int seconds) {
 		int minutes = seconds / 60;
 		seconds = seconds % 60;

@@ -1,5 +1,8 @@
 package jchessfx;
 
+/**
+ * Contains the logic of the game: everything that is not a graphical feature.
+ */
 public class GameLogic {
 
 	// Public constants
