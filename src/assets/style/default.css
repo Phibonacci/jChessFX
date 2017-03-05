@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Monofonto-Regular';
+    src: url('../fonts/monofonto.ttf');
+}
+
+.game-window {
+	-fx-background-color: #f0f0f0;
+}
+
+.game-menu {
+	-fx-background-color: rgba(32, 32, 32, 0.5);
+	-fx-background-radius: 15px;
+	-fx-padding: 16px;
+	-fx-spacing: 8px;
+}
+
+.game-menu .button {
+	-fx-text-fill: white;
+	-fx-background-color: #454545;
+	-fx-font-size: 150%;
+	-fx-cursor: hand;
+	-fx-font-family: 'Monofonto-Regular';
+}
+
+.game-menu .button:hover {
+	-fx-background-color: #555555;
+}
+
+.game-menu .button:pressed {
+	-fx-effect: innershadow(gaussian, #454545, 10, 0.0, 5, 5);
+}
+
+.game-statusbar {
+	-fx-font-family: 'Monofonto-Regular';
+	-fx-font-size: 150%;
+	-fx-padding: 8px;
+}
+
+.game-promotion {
+	-fx-background-color: rgba(32, 32, 32, 0.5);
+	-fx-background-radius: 15px;
+	-fx-spacing: 0;
+	-fx-alignment: center;
+	-fx-padding: 16px;
+	-fx-background-insets: -8px;
+}
+
+.game-promotion .button {
+	-fx-background-radius: 15px;
+	-fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.game-promotion .button:hover {
+	-fx-background-color: rgba(32, 32, 32, 0.3);
+}
+
+.game-promotion .button:pressed {
+	-fx-background-color: rgba(32, 32, 32, 0.5);
+}
+
+.game-square-white {
+	-fx-fill: white;
+	-fx-stroke: #808080;
+}
+
+.game-square-black {
+	-fx-fill: darkgray;
+	-fx-stroke: #808080;
+}
+
+.game-square-selectable-white {
+	-fx-fill: lightgreen;
+	-fx-stroke: #808080;
+}
+
+.game-square-selectable-black {
+	-fx-fill: forestgreen;
+	-fx-stroke: #808080;
+}
+
+.game-piece-selected {
+	-fx-rotate: 10deg;
+	-fx-opacity: 50%;
+}
